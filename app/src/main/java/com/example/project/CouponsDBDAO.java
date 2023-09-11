@@ -222,12 +222,19 @@ public class CouponsDBDAO implements CouponsDAO
 
     @Override
     public void addCouponPurchase(int customerID, int couponID) {
-        //////////// hiiiiiiiiiii
+
+            ContentValues cv = new ContentValues();
+            cv.put(dbManager.CUSTOMER_ID, customerID);
+            cv.put(dbManager.COUPON_ID, couponID);
+
+            SQLiteDatabase db = dbManager.getWritableDatabase();
+            db.insert(dbManager.TBL_CUSTOMERS_VS_COUPONS, null, cv);
 
     }
 
     @Override
     public void deleteCouponPurchase(int customerID, int couponID) {
+
 
     }
 }

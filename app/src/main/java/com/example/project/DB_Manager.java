@@ -76,11 +76,11 @@ public class DB_Manager extends SQLiteOpenHelper {
             "FOREIGN KEY(" + KEY_CATEGORY_ID_FK + ") REFERENCES " + TBL_CATEGORIES + "(" + CATEGORY_ID + "))";
 
 
-    private final static String TBL_CUSTOMERS_VS_COUPONS = "Customers_vs_Coupons";
-    private final static String COUPON_ID = "CouponID";
+    public final static String TBL_CUSTOMERS_VS_COUPONS = "Customers_vs_Coupons";
+    public final static String COUPON_ID = "CouponID";
 
 
-    private final static String CREATE_TABLE_CUSTOMERS_VS_COUPONS =
+    public final static String CREATE_TABLE_CUSTOMERS_VS_COUPONS =
             "CREATE TABLE IF NOT EXISTS " + TBL_CUSTOMERS_VS_COUPONS +
                     " (" + CUSTOMER_ID + " INTEGER, " +
                     COUPON_ID + " INTEGER, " +
