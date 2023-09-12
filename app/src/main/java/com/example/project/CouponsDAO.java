@@ -14,4 +14,5 @@ public interface CouponsDAO {
     void deleteCouponsPurchaseByCouponID(int couponID);
      void deleteCouponsPurchaseByCustomerID(int couponID);
 
+
 }

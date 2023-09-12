@@ -14,8 +14,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class CouponsDBDAO implements CouponsDAO
-{
+public class CouponsDBDAO implements CouponsDAO {
     ArrayList<Coupon> coupons;
     private static CouponsDBDAO instance = null;
     DB_Manager dbManager;
@@ -27,8 +26,8 @@ public class CouponsDBDAO implements CouponsDAO
     private CouponsDBDAO(Context context) {
         //companies=getAllCompanies();
         dbManager = DB_Manager.getInstance(context);
-        coupons=new ArrayList<Coupon>();
-        customersDAO= new CustomersDBDAO(context);
+        coupons = new ArrayList<Coupon>();
+        customersDAO = new CustomersDBDAO(context);
     }
 
 
@@ -36,36 +35,28 @@ public class CouponsDBDAO implements CouponsDAO
         if (instance == null) instance = new CouponsDBDAO(context);
         return instance;
     }
-//...Singleton.............................
+
+    //...Singleton.............................
     @Override
     public void addCoupon(Coupon coupon) {
-        Coupon newCoupon=getOneCoupon(coupon.getId());
-        String[] fields={dbManager.CATEGORY_ID, dbManager.CATEGORY_NAME};
-        if(newCoupon==null)
-        {
+        Coupon newCoupon = getOneCoupon(coupon.getId());
+        String[] fields = {dbManager.CATEGORY_ID, dbManager.CATEGORY_NAME};
+        if (newCoupon == null) {
             ContentValues cv = new ContentValues();
             cv.put(dbManager.COUPONS_ID, coupon.getId());
             cv.put(dbManager.KEY_COMPANY_ID_FK, coupon.getCompanyID());
-            String categoryType=null;
-            if (coupon.getCategory() == Category.FOOD)
-                categoryType = "FOOD";
-            if (coupon.getCategory() == Category.ELECTRICITY)
-                categoryType = "ELECTRICITY";
-            if (coupon.getCategory() == Category.RESTAURANT)
-                categoryType = "RESTAURANT";
-            if (coupon.getCategory() == Category.VACATION)
-                categoryType = "VACATION";
-            Cursor cr = dbManager.getCursor(dbManager.TBL_CATEGORIES, fields, dbManager.CATEGORY_NAME +"= '" + categoryType + "'");            int category_id = cr.getInt(0);
+
+            int category_id=getCategoryID(coupon.getCategory());//getting category id by the category type using function we built
 
             cv.put(dbManager.KEY_CATEGORY_ID_FK, category_id);
             cv.put(dbManager.COUPONS_TITLE, coupon.getTitle());
             cv.put(dbManager.COUPONS_DESCRIPTION, coupon.getDescription());
 
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            Date startDate =coupon.getStartDate();
+            Date startDate = coupon.getStartDate();
             String formattedStartDate = sdf.format(startDate);
 
-            Date endDate =coupon.getEndDate();
+            Date endDate = coupon.getEndDate();
             String formattedEndDate = sdf.format(endDate);
 
             cv.put(dbManager.COUPONS_START_DATE, formattedStartDate);
@@ -75,21 +66,21 @@ public class CouponsDBDAO implements CouponsDAO
             cv.put(dbManager.COUPONS_IMAGE, coupon.getImage());
 
             dbManager.getWritableDatabase().insert(dbManager.TBL_COUPONS, null, cv);
-        }
-        else
+        } else
             try {
                 throw new DataExists("This employee already exists !");
             } catch (DataExists e) {
                 throw new RuntimeException(e);
             }
-        }
+    }
+
     @Override
     public void updateCoupon(Coupon coupon) {
         Coupon updatedCoupon = getOneCoupon(coupon.getId());
-        if (updatedCoupon!=null) {
+        if (updatedCoupon != null) {
 
-            for(Coupon coupon1:coupons){
-                if(coupon1.getId()==coupon.getId()){         //updating the coupon in the array list
+            for (Coupon coupon1 : coupons) {
+                if (coupon1.getId() == coupon.getId()) {         //updating the coupon in the array list
                     coupon1.setCategory(coupon.getCategory());
                     coupon1.setCompanyID(coupon1.getCompanyID());
                     coupon1.setTitle(coupon1.getTitle());
@@ -101,28 +92,18 @@ public class CouponsDBDAO implements CouponsDAO
                     coupon1.setImage(coupon1.getImage());
                 }
             }
-            String []fields={dbManager.CATEGORY_ID}; // we only need the category id
+
             ContentValues cv = new ContentValues();
 
-            //Preparing the categoryID by its type
-            String categoryType=null;
-            if (coupon.getCategory() == Category.FOOD)
-                categoryType = "FOOD";
-            if (coupon.getCategory() == Category.ELECTRICITY)
-                categoryType = "ELECTRICITY";
-            if (coupon.getCategory() == Category.RESTAURANT)
-                categoryType = "RESTAURANT";
-            if (coupon.getCategory() == Category.VACATION)
-                categoryType = "VACATION";
-            Cursor cr = dbManager.getCursor(dbManager.TBL_CATEGORIES, fields, dbManager.CATEGORY_NAME +"= '" + categoryType + "'");
-            int category_id = cr.getInt(0);
-            cv.put(dbManager.CATEGORY_ID,category_id );
+            int category_id=getCategoryID(coupon.getCategory());
+
+            cv.put(dbManager.CATEGORY_ID, category_id);
 
             //preparing the start and end date from Dates to String
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            Date startDate =coupon.getStartDate();
+            Date startDate = coupon.getStartDate();
             String formattedStartDate = sdf.format(startDate);
-            Date endDate =coupon.getEndDate();
+            Date endDate = coupon.getEndDate();
             String formattedEndDate = sdf.format(endDate);
 
             cv.put(dbManager.COUPONS_START_DATE, formattedStartDate);
@@ -132,14 +113,13 @@ public class CouponsDBDAO implements CouponsDAO
             cv.put(dbManager.COMPANY_ID, coupon.getCompanyID());
             cv.put(dbManager.COUPONS_TITLE, coupon.getTitle());
             cv.put(dbManager.COUPONS_DESCRIPTION, coupon.getDescription());
-            cv.put(dbManager.COUPONS_AMOUNT,coupon.getAmount());
-            cv.put(dbManager.COUPONS_PRICE,coupon.getPrice());
-            cv.put(dbManager.COUPONS_IMAGE,coupon.getImage());
+            cv.put(dbManager.COUPONS_AMOUNT, coupon.getAmount());
+            cv.put(dbManager.COUPONS_PRICE, coupon.getPrice());
+            cv.put(dbManager.COUPONS_IMAGE, coupon.getImage());
 
             SQLiteDatabase db = dbManager.getWritableDatabase();
-            db.update(dbManager.TBL_COUPONS, cv, dbManager.COUPONS_ID +"= '" + coupon.getId() + "'", null);
-        }
-        else
+            db.update(dbManager.TBL_COUPONS, cv, dbManager.COUPONS_ID + "= '" + coupon.getId() + "'", null);
+        } else
             try {
                 throw new DataNotExists("Employee not exists !");
             } catch (DataNotExists e) {
@@ -160,8 +140,8 @@ public class CouponsDBDAO implements CouponsDAO
                 throw new DataNotExists("Employee does not exist!");
             } catch (DataNotExists e) {
                 throw new RuntimeException(e);
-         }
-    }
+            }
+        }
 
 
     }
@@ -170,13 +150,13 @@ public class CouponsDBDAO implements CouponsDAO
     public ArrayList<Coupon> getAllCoupons() throws ParseException {
         ArrayList<Coupon> coupons1 = new ArrayList<>();
         String[] fields = {dbManager.COUPONS_ID, dbManager.KEY_COMPANY_ID_FK, dbManager.KEY_CATEGORY_ID_FK, dbManager.COUPONS_TITLE,
-                dbManager.COUPONS_DESCRIPTION,dbManager.COUPONS_START_DATE,dbManager.COUPONS_END_DATE,dbManager.COUPONS_AMOUNT,dbManager.COUPONS_PRICE,dbManager.COUPONS_IMAGE};
-        String  title,description,couponsImage;
+                dbManager.COUPONS_DESCRIPTION, dbManager.COUPONS_START_DATE, dbManager.COUPONS_END_DATE, dbManager.COUPONS_AMOUNT, dbManager.COUPONS_PRICE, dbManager.COUPONS_IMAGE};
+        String title, description, couponsImage;
         int amount;
-        Date startDate,endDate;
+        Date startDate, endDate;
         String category;
         Double price;
-        int couponsId, companyId,categoryId;
+        int couponsId, companyId, categoryId;
         int id;
         Category categoryType = null;
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -187,37 +167,40 @@ public class CouponsDBDAO implements CouponsDAO
                     couponsId = cr.getInt(0);
                     companyId = cr.getInt(1);
                     categoryId = cr.getInt(2);
-                    Cursor cr2 = dbManager.getCursor(dbManager.TBL_CATEGORIES, fields, dbManager.CATEGORY_ID +"= '" + categoryId + "'");
-                    category = cr.getString(3);
+                    Cursor cr2 = dbManager.getCursor(dbManager.TBL_CATEGORIES, fields, dbManager.CATEGORY_ID + "= '" + categoryId + "'");
+                    category = cr2.getString(3);
                     if (category.equals("FOOD"))
                         categoryType = Category.FOOD;
                     if (category.equals("ELECTRICITY"))
                         categoryType = Category.ELECTRICITY;
                     if (category.equals("RESTAURANT"))
-                        categoryType =Category.RESTAURANT;
+                        categoryType = Category.RESTAURANT;
                     if (category.equals("VACATION"))
                         categoryType = Category.VACATION;
                     title = cr.getString(4);
-                    description=cr.getString(5);
-                    startDate= sdf.parse(cr.getString(6));
-                    endDate= sdf.parse(cr.getString(7));
-                    amount=cr.getInt(8);
-                    price=cr.getDouble(9);
-                    couponsImage=cr.getString(10);
+                    description = cr.getString(5);
+                    startDate = sdf.parse(cr.getString(6));
+                    endDate = sdf.parse(cr.getString(7));
+                    amount = cr.getInt(8);
+                    price = cr.getDouble(9);
+                    couponsImage = cr.getString(10);
 
 
-                    coupons1.add(new Coupon(couponsId, companyId, categoryType, title, description,startDate,endDate,amount,price,couponsImage));
+                    coupons1.add(new Coupon(couponsId, companyId, categoryType, title, description, startDate, endDate, amount, price, couponsImage));
                 } while (cr.moveToNext());
             return coupons1;
-        }catch(Exception e){
+        } catch (Exception e) {
             throw e;
         }
     }
 
+
+
+
     @Override
     public Coupon getOneCoupon(int couponID) {
-        for (Coupon coupon : coupons ) {
-            if(coupon.getId() == couponID)
+        for (Coupon coupon : coupons) {
+            if (coupon.getId() == couponID)
                 return coupon;
         }
         return null;
@@ -226,54 +209,75 @@ public class CouponsDBDAO implements CouponsDAO
 
     @Override
     public void addCouponPurchase(int customerID, int couponID) {
-            ArrayList<Coupon> customerCoupons;
-            ContentValues cv = new ContentValues();
-            cv.put(dbManager.CUSTOMER_ID, customerID);
-            cv.put(dbManager.COUPON_ID, couponID);
+        ArrayList<Coupon> customerCoupons;
+        ContentValues cv = new ContentValues();
+        cv.put(dbManager.CUSTOMER_ID, customerID);
+        cv.put(dbManager.COUPON_ID, couponID);
 
-            SQLiteDatabase db = dbManager.getWritableDatabase();
-            db.insert(dbManager.TBL_CUSTOMERS_VS_COUPONS, null, cv);
-            customerCoupons=customersDAO.getOneCustomer(customerID).getCoupons();
-            for(Coupon coupon: coupons)
-                  if(coupon.getId()==couponID) {
-                      customerCoupons.add(coupon);
-                      coupon.setAmount(coupon.getAmount()-1);
-                  }
+        SQLiteDatabase db = dbManager.getWritableDatabase();
+        db.insert(dbManager.TBL_CUSTOMERS_VS_COUPONS, null, cv);
+        customerCoupons = customersDAO.getOneCustomer(customerID).getCoupons();
+        for (Coupon coupon : coupons)
+            if (coupon.getId() == couponID) { //ADDING THE COUPON TO THE CUSTOMER COUPONS???
+                customerCoupons.add(coupon);
+                coupon.setAmount(coupon.getAmount() - 1);
+            }
 
     }
+
     @Override
     public void deleteCouponPurchase(int customerID, int couponID) {
 
         ArrayList<Coupon> customerCoupons;
         SQLiteDatabase db = dbManager.getWritableDatabase();
         db.delete(dbManager.TBL_CUSTOMERS_VS_COUPONS, dbManager.COUPONS_ID + "= '" + customerID + "'", null);
-        customerCoupons=customersDAO.getOneCustomer(customerID).getCoupons();
-        for(Coupon coupon: customerCoupons)
-            if(coupon.getId()==couponID) {
+        customerCoupons = customersDAO.getOneCustomer(customerID).getCoupons();
+        for (Coupon coupon : customerCoupons)
+            if (coupon.getId() == couponID) {
                 customerCoupons.remove(coupon);
                 coupon.setAmount(coupon.getAmount() + 1);
             }
     }
-    public void deleteCouponsPurchaseByCouponID(int couponID){
+
+    public void deleteCouponsPurchaseByCouponID(int couponID) {
         int customerId;
         String[] fields = {dbManager.CUSTOMER_ID, dbManager.COUPONS_ID};
-        Cursor cr = dbManager.getCursor(dbManager.TBL_CUSTOMERS_VS_COUPONS, fields, dbManager.COUPONS_ID +"= '" + couponID + "'");
+        Cursor cr = dbManager.getCursor(dbManager.TBL_CUSTOMERS_VS_COUPONS, fields, dbManager.COUPONS_ID + "= '" + couponID + "'");
         if (cr.moveToFirst())
             do {
                 customerId = cr.getInt(0);
-                deleteCouponPurchase(customerId,couponID);
+                deleteCouponPurchase(customerId, couponID);
 
             } while (cr.moveToNext());
     }
-    public void deleteCouponsPurchaseByCustomerID(int customerId){
+
+    public void deleteCouponsPurchaseByCustomerID(int customerId) {
         int couponID;
         String[] fields = {dbManager.CUSTOMER_ID, dbManager.COUPONS_ID};
-        Cursor cr = dbManager.getCursor(dbManager.TBL_CUSTOMERS_VS_COUPONS, fields, dbManager.CUSTOMER_ID +"= '" + customerId + "'");
+        Cursor cr = dbManager.getCursor(dbManager.TBL_CUSTOMERS_VS_COUPONS, fields, dbManager.CUSTOMER_ID + "= '" + customerId + "'");
         if (cr.moveToFirst())
             do {
                 couponID = cr.getInt(1);
-                deleteCouponPurchase(customerId,couponID);
+                deleteCouponPurchase(customerId, couponID);
 
             } while (cr.moveToNext());
     }
+
+    int getCategoryID(Category category){
+        //Preparing the categoryID by its type
+        String[] fields = {dbManager.CATEGORY_ID}; // we only need the category id
+        String categoryType = null;
+        if (category == Category.FOOD)
+            categoryType = "FOOD";
+        if (category == Category.ELECTRICITY)
+            categoryType = "ELECTRICITY";
+        if (category == Category.RESTAURANT)
+            categoryType = "RESTAURANT";
+        if (category == Category.VACATION)
+            categoryType = "VACATION";
+        Cursor cr = dbManager.getCursor(dbManager.TBL_CATEGORIES, fields, dbManager.CATEGORY_NAME + "= '" + categoryType + "'");
+        int category_id = cr.getInt(0);
+        return category_id;
+    }
+
 }

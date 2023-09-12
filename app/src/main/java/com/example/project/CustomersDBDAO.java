@@ -126,7 +126,7 @@ public class CustomersDBDAO implements CustomersDAO {
         String[] fields = {"id", "fName","lName","email", "password"};
         String  fName,lName, email, password;
         int id;
-        double salary;
+
         try {
             Cursor cr = dbManager.getCursor(dbManager.TBL_CUSTOMERS, fields, null);
             if (cr.moveToFirst())
