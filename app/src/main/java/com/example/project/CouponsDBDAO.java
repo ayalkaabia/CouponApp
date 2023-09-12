@@ -19,13 +19,16 @@ public class CouponsDBDAO implements CouponsDAO
     ArrayList<Coupon> coupons;
     private static CouponsDBDAO instance = null;
     DB_Manager dbManager;
+    private Context context;
+    private CustomersDAO customersDAO;
 
 
-//...Singleton.............................
+    //...Singleton.............................
     private CouponsDBDAO(Context context) {
         //companies=getAllCompanies();
         dbManager = DB_Manager.getInstance(context);
         coupons=new ArrayList<Coupon>();
+        customersDAO= new CustomersDBDAO(context);
     }
 
 
@@ -168,7 +171,8 @@ public class CouponsDBDAO implements CouponsDAO
         ArrayList<Coupon> coupons1 = new ArrayList<>();
         String[] fields = {dbManager.COUPONS_ID, dbManager.KEY_COMPANY_ID_FK, dbManager.KEY_CATEGORY_ID_FK, dbManager.COUPONS_TITLE,
                 dbManager.COUPONS_DESCRIPTION,dbManager.COUPONS_START_DATE,dbManager.COUPONS_END_DATE,dbManager.COUPONS_AMOUNT,dbManager.COUPONS_PRICE,dbManager.COUPONS_IMAGE};
-        String  title,description,couponsImage,amount;
+        String  title,description,couponsImage;
+        int amount;
         Date startDate,endDate;
         String category;
         Double price;
@@ -197,7 +201,7 @@ public class CouponsDBDAO implements CouponsDAO
                     description=cr.getString(5);
                     startDate= sdf.parse(cr.getString(6));
                     endDate= sdf.parse(cr.getString(7));
-                    amount=cr.getString(8);
+                    amount=cr.getInt(8);
                     price=cr.getDouble(9);
                     couponsImage=cr.getString(10);
 
@@ -222,19 +226,54 @@ public class CouponsDBDAO implements CouponsDAO
 
     @Override
     public void addCouponPurchase(int customerID, int couponID) {
-
+            ArrayList<Coupon> customerCoupons;
             ContentValues cv = new ContentValues();
             cv.put(dbManager.CUSTOMER_ID, customerID);
             cv.put(dbManager.COUPON_ID, couponID);
 
             SQLiteDatabase db = dbManager.getWritableDatabase();
             db.insert(dbManager.TBL_CUSTOMERS_VS_COUPONS, null, cv);
+            customerCoupons=customersDAO.getOneCustomer(customerID).getCoupons();
+            for(Coupon coupon: coupons)
+                  if(coupon.getId()==couponID) {
+                      customerCoupons.add(coupon);
+                      coupon.setAmount(coupon.getAmount()-1);
+                  }
 
     }
-
     @Override
     public void deleteCouponPurchase(int customerID, int couponID) {
 
+        ArrayList<Coupon> customerCoupons;
+        SQLiteDatabase db = dbManager.getWritableDatabase();
+        db.delete(dbManager.TBL_CUSTOMERS_VS_COUPONS, dbManager.COUPONS_ID + "= '" + customerID + "'", null);
+        customerCoupons=customersDAO.getOneCustomer(customerID).getCoupons();
+        for(Coupon coupon: customerCoupons)
+            if(coupon.getId()==couponID) {
+                customerCoupons.remove(coupon);
+                coupon.setAmount(coupon.getAmount() + 1);
+            }
+    }
+    public void deleteCouponsPurchaseByCouponID(int couponID){
+        int customerId;
+        String[] fields = {dbManager.CUSTOMER_ID, dbManager.COUPONS_ID};
+        Cursor cr = dbManager.getCursor(dbManager.TBL_CUSTOMERS_VS_COUPONS, fields, dbManager.COUPONS_ID +"= '" + couponID + "'");
+        if (cr.moveToFirst())
+            do {
+                customerId = cr.getInt(0);
+                deleteCouponPurchase(customerId,couponID);
 
+            } while (cr.moveToNext());
+    }
+    public void deleteCouponsPurchaseByCustomerID(int customerId){
+        int couponID;
+        String[] fields = {dbManager.CUSTOMER_ID, dbManager.COUPONS_ID};
+        Cursor cr = dbManager.getCursor(dbManager.TBL_CUSTOMERS_VS_COUPONS, fields, dbManager.CUSTOMER_ID +"= '" + customerId + "'");
+        if (cr.moveToFirst())
+            do {
+                couponID = cr.getInt(1);
+                deleteCouponPurchase(customerId,couponID);
+
+            } while (cr.moveToNext());
     }
 }
