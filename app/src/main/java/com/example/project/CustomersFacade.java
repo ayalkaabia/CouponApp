@@ -14,10 +14,11 @@ public class CustomersFacade extends ClientFacade{
     boolean login(String email, String password) {
         Customer customer=null;
         //customer is performing a login
-
+        customer=customersDAO.getCustomer(email,password);
+        if(customer==null) return false;
         //if customer logged in then the customerID variable is the id of the costumer that logged in
         this.customerID=customer.getId();
-        return false;
+        return true;
     }
 
     void purchaseCoupon(Coupon coupon) throws Exception {
@@ -29,7 +30,7 @@ public class CustomersFacade extends ClientFacade{
             throw new Exception("Coupon quantity is 0");
         }
 //        //CHECKING IF EXPIRATION DATE  HAS ALREADY ARRIVED
-//        if(couponsDAO.expired(coupon.getId())){
+//        if(couponsDAO.checkExpired(coupon.getId())){
 //            throw new Exception("expiration date has already arrived");
 //        }
         //purchase the coupon and link the coupon id with the customer id + reduce quantity by 1

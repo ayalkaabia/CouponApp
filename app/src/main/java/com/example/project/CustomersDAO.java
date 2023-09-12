@@ -9,4 +9,6 @@ public interface CustomersDAO {
     void deleteCustomer(int customerID);
     ArrayList<Customer> getAllCustomers();
     Customer getOneCustomer(int customerID);
+
+    Customer getCustomer(String email, String password);
 }

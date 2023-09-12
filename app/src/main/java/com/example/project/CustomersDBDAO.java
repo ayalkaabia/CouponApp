@@ -45,6 +45,14 @@ public class CustomersDBDAO implements CustomersDAO {
         }
         return false;
     }
+    public Customer getCustomer(String email, String password) {
+        for(Customer customer:customers){
+            if(customer.getEmail().equals(email) && customer.getPassword().equals(password)){
+                return customer;
+            }
+        }
+        return null;
+    }
 
     @Override
     public void addCustomer(Customer customer)  {
