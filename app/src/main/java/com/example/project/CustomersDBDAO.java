@@ -17,7 +17,7 @@ public class CustomersDBDAO implements CustomersDAO {
     //...Singleton.............................
     private static CustomersDBDAO instance = null;
 
-    private CustomersDBDAO(Context context) {
+    CustomersDBDAO(Context context) {
 
         try {
 
@@ -80,7 +80,7 @@ public class CustomersDBDAO implements CustomersDAO {
                     customer1.setfName(customer.getfName());
                     customer1.setlName(customer.getlName());
                     customer1.setEmail(customer.getEmail());
-                    customer1.setPassword(customer.getPassword());
+                  //  customer1.setPassword(customer.getPassword());
                 }
             }
 
@@ -89,7 +89,7 @@ public class CustomersDBDAO implements CustomersDAO {
             cv.put(dbManager.F_NAME, customer.getfName());
             cv.put(dbManager.L_NAME, customer.getlName());
             cv.put(dbManager.EMAIL, customer.getEmail());
-            cv.put(dbManager.PASSWORD, customer.getPassword());
+          //  cv.put(dbManager.PASSWORD, customer.getPassword());
 
             SQLiteDatabase db = dbManager.getWritableDatabase();
             db.update(dbManager.TBL_CUSTOMERS, cv, dbManager.CUSTOMER_ID + "=" + customer.getId(), null);

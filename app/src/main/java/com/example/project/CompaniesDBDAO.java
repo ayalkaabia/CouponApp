@@ -38,6 +38,7 @@ public class CompaniesDBDAO implements  CompaniesDAO {
         return false;
     }
 
+
     @Override
     public void addCompany(Company company) throws DataExists {
 
@@ -65,16 +66,16 @@ public class CompaniesDBDAO implements  CompaniesDAO {
             {
                 if(company1.getId() == company.getId())
                 {
-                    company1.setName(company.getName());
+              //      company1.setName(company.getName());
                     company1.setEmail(company.getEmail());
-                    company1.setPassword(company.getPassword());
+                //    company1.setPassword(company.getPassword());
                 }
             }
 
             ContentValues cv = new ContentValues();
-            cv.put("name", company.getName());
+           // cv.put("name", company.getName());
             cv.put("email", company.getEmail());
-            cv.put("password", company.getPassword());
+          //  cv.put("password", company.getPassword());
 
 
             SQLiteDatabase db = dbManager.getWritableDatabase();

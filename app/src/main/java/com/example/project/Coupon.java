@@ -10,11 +10,11 @@ public class Coupon {
     private String description;
     private Date startDate;
     private Date endDate;
-    private String amount;
+    private int amount;
     private Double price;
     private String image;
 
-    public Coupon(int id, int companyID, Category category, String title, String description, Date startDate, Date endDate, String amount, Double price, String image) {
+    public Coupon(int id, int companyID, Category category, String title, String description, Date startDate, Date endDate, int amount, Double price, String image) {
         this.id = id;
         this.companyID = companyID;
         this.category = category;
@@ -55,7 +55,7 @@ public class Coupon {
         return endDate;
     }
 
-    public String getAmount() {
+    public int getAmount() {
         return amount;
     }
 
@@ -111,7 +111,7 @@ public class Coupon {
         this.endDate = endDate;
     }
 
-    public void setAmount(String amount) {
+    public void setAmount(int amount) {
         this.amount = amount;
     }
 
