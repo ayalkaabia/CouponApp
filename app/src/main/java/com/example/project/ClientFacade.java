@@ -9,6 +9,12 @@ public abstract class ClientFacade {
     CouponsDAO couponsDAO;
     CustomersDAO customersDAO;
 
+    public ClientFacade(CompaniesDAO companiesDAO, CouponsDAO couponsDAO, CustomersDAO customersDAO) {
+        this.companiesDAO = companiesDAO;
+        this.couponsDAO = couponsDAO;
+        this.customersDAO = customersDAO;
+    }
+
     abstract boolean login(String email, String password) ;
 
 
