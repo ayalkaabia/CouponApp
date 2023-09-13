@@ -1,13 +1,15 @@
 package com.example.project;
 
+import android.content.Context;
+
 import java.text.ParseException;
 import java.util.ArrayList;
 
 public class CustomersFacade extends ClientFacade{
     private int customerID;
-    public CustomersFacade(CompaniesDAO companiesDAO, CouponsDAO couponsDAO, CustomersDAO customersDAO) {
-        super(companiesDAO, couponsDAO, customersDAO);
 
+    public CustomersFacade(Context context) {
+        super(context);
     }
 
     @Override
