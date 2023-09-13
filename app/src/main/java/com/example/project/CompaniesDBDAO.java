@@ -22,7 +22,7 @@ public class CompaniesDBDAO implements  CompaniesDAO {
         companies=getAllCompanies();
         dbManager= DB_Manager.getInstance(context);
     }
-    public CompaniesDBDAO getInstance(Context context) {
+    public static CompaniesDBDAO getInstance(Context context) {
         if (instance == null) instance = new CompaniesDBDAO(context);
         return instance;
     }
@@ -140,4 +140,6 @@ public class CompaniesDBDAO implements  CompaniesDAO {
         }
         return null;
     }
+
+
 }

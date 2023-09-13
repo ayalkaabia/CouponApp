@@ -1,6 +1,5 @@
 package com.example.project;
 
-
 import android.content.Context;
 
 import java.util.ArrayList;
@@ -99,4 +98,3 @@ public class CompanyFacade extends  ClientFacade
 
 
 }
-
