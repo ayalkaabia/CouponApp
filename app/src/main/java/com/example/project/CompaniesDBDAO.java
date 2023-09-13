@@ -22,7 +22,7 @@ public class CompaniesDBDAO implements  CompaniesDAO {
         companies=getAllCompanies();
         dbManager= DB_Manager.getInstance(context);
     }
-    public static CompaniesDBDAO getInstance(Context context) throws SQLException {
+    public CompaniesDBDAO getInstance(Context context) {
         if (instance == null) instance = new CompaniesDBDAO(context);
         return instance;
     }
@@ -36,6 +36,14 @@ public class CompaniesDBDAO implements  CompaniesDAO {
                 return true;
         }
         return false;
+    }
+
+    public Company isCompanyExists2(String email, String password) {
+        for (Company company : companies ) {
+            if(company.getEmail().equals(email) && company.getPassword().equals(password))
+                return company;
+        }
+        return null;
     }
 
 

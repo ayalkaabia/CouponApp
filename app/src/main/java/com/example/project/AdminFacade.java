@@ -1,5 +1,7 @@
 package com.example.project;
 
+import android.content.Context;
+
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -9,12 +11,12 @@ public class AdminFacade extends ClientFacade {
     //...Singleton.............................
     private static AdminFacade instance = null;
 
-    private AdminFacade(CompaniesDAO companiesDAO,CouponsDAO couponsDAO,CustomersDAO customersDAO) {
-        super(companiesDAO,couponsDAO,customersDAO);
+    public AdminFacade(Context context) {
+        super(context);
     }
 
-    public static AdminFacade getInstance(CompaniesDAO companiesDAO,CouponsDAO couponsDAO,CustomersDAO customersDAO) {
-        if (instance == null) instance = new AdminFacade(companiesDAO,couponsDAO,customersDAO);
+    public static AdminFacade getInstance(Context context) {
+        if (instance == null) instance = new AdminFacade(context);
         return instance;
     }
     //...Singleton.............................
