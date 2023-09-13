@@ -14,7 +14,7 @@ public abstract class ClientFacade {
     public ClientFacade(Context context) {
         this.customersDAO = CustomersDBDAO.getInstance(context);
         this.couponsDAO = CouponsDBDAO.getInstance(context);
-        this.companiesDAO = companiesDAO.getInstance(context);
+        this.companiesDAO = CompaniesDBDAO.getInstance(context);
 
 
     }
