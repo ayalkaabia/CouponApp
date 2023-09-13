@@ -2,10 +2,11 @@ package com.example.project;
 
 import android.content.Context;
 
+import java.io.Serializable;
 import java.text.ParseException;
 import java.util.ArrayList;
 
-public class CustomersFacade extends ClientFacade{
+public class CustomersFacade extends ClientFacade implements Serializable {
     private int customerID;
 
     public CustomersFacade(Context context) {

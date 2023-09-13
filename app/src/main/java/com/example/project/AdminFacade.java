@@ -1,11 +1,12 @@
 package com.example.project;
 import android.content.Context;
 
+import java.io.Serializable;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.ArrayList;
 
-public class AdminFacade extends ClientFacade {
+public class AdminFacade extends ClientFacade implements Serializable {
     private static  final String adminEmail = "admin@admin.com";
     private static  final String adminPass = "admin";
     private static Context context;

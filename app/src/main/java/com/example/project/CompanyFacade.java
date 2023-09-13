@@ -2,9 +2,10 @@ package com.example.project;
 
 import android.content.Context;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class CompanyFacade extends  ClientFacade
+public class CompanyFacade extends  ClientFacade implements Serializable
 {
     private int companyID;
 

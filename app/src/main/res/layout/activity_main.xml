@@ -6,13 +6,77 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
+    <EditText
+        android:id="@+id/main_etUN"
+        android:layout_width="313dp"
+        android:layout_height="63dp"
+        android:layout_marginTop="32dp"
+        android:ems="10"
+        android:inputType="text"
+        android:text="Name"
+        android:textSize="34sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/main_etPass"
+        android:layout_width="313dp"
+        android:layout_height="63dp"
+        android:layout_marginTop="48dp"
+        android:ems="10"
+        android:inputType="textPassword"
+        android:text="Name"
+        android:textSize="34sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/main_etUN" />
+
+    <RadioGroup
+        android:id="@+id/main_rgUserType"
+        android:layout_width="316dp"
+        android:layout_height="172dp"
+        android:layout_marginTop="60dp"
+        app:layout_constraintStart_toStartOf="@+id/main_etPass"
+        app:layout_constraintTop_toBottomOf="@+id/main_etPass">
+
+        <RadioButton
+            android:id="@+id/main_rbAdmin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:text="Admin"
+            android:textSize="34sp" />
+
+        <RadioButton
+            android:id="@+id/main_rbCustomer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:text="Customer"
+            android:textSize="34sp" />
+
+        <RadioButton
+            android:id="@+id/main_rbCompany"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:text="Company"
+            android:textSize="34sp" />
+    </RadioGroup>
+
+    <Button
+        android:id="@+id/main_btnLogin"
+        android:layout_width="192dp"
+        android:layout_height="62dp"
+        android:layout_marginTop="96dp"
+        android:background="#8AB2C3"
+        android:backgroundTint="#99BCCC"
+        android:text="Login"
+        android:textSize="34sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/main_rgUserType" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
