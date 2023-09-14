@@ -4,7 +4,11 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintStream;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -17,11 +21,54 @@ public class CompaniesDBDAO implements  CompaniesDAO {
     //...Singleton.............................
     private static CompaniesDBDAO instance = null;
 
+//
+//    private CompaniesDBDAO(Context context) {
+//        companies=getAllCompanies();
+//        dbManager= DB_Manager.getInstance(context);
+//        System.out.println("companiesDBDAO construction was a success");
+//    }
+    private static final String TAG = "CompaniesDBDAO";
 
-    private CompaniesDBDAO(Context context) {
-        companies=getAllCompanies();
-        dbManager= DB_Manager.getInstance(context);
+    public CompaniesDBDAO(Context context) {
+        try {
+            companies=getAllCompanies();
+            dbManager= DB_Manager.getInstance(context);
+            logSystemOutMessage("CompaniesDBDAO Construction success");
+        } catch (Exception e) {
+            throw e;
+        }
     }
+
+    private void logSystemOutMessage(String message) {
+        // Redirect System.out to Logcat
+        System.setOut(new PrintStream(new CompaniesDBDAO.LogcatOutputStream()));
+
+        // Print the message
+        System.out.println(message);
+
+        // Restore the standard output
+        System.setOut(new PrintStream(new OutputStream() {
+            @Override
+            public void write(int b) throws IOException {
+                // This is needed to prevent further System.out usage from crashing
+            }
+        }));
+    }
+
+    private static class LogcatOutputStream extends OutputStream {
+        private StringBuilder buffer = new StringBuilder();
+
+        @Override
+        public void write(int b) throws IOException {
+            if (b == '\n') {
+                Log.d(TAG, buffer.toString());
+                buffer.setLength(0);
+            } else {
+                buffer.append((char) b);
+            }
+        }
+    }
+
     public static CompaniesDBDAO getInstance(Context context) {
         if (instance == null) instance = new CompaniesDBDAO(context);
         return instance;
@@ -61,6 +108,7 @@ public class CompaniesDBDAO implements  CompaniesDAO {
 
                 SQLiteDatabase db = dbManager.getWritableDatabase();
                 db.insert("companies", null, cv);
+                logSystemOutMessage("companiesDBDAO addCompany success");
             }
             else
                 throw new DataExists("This employee already exists !");
@@ -88,6 +136,7 @@ public class CompaniesDBDAO implements  CompaniesDAO {
 
             SQLiteDatabase db = dbManager.getWritableDatabase();
             db.update("companies", cv,  "company_id" + "='" + company.getId() + "'", null);
+            logSystemOutMessage("companiesDBDAO updateCompany success");
         }
         else
             throw new DataNotExists("Employee not exists !");
@@ -101,6 +150,7 @@ public class CompaniesDBDAO implements  CompaniesDAO {
             companies.remove(toBeDeleted);
             SQLiteDatabase db = dbManager.getWritableDatabase();
             db.delete("companies", "company_id" + "='" + companyId + "'", null);
+            logSystemOutMessage("companiesDBDAO deleteCompany success");
         }
         else
             throw new DataNotExists("Employee not exists !");
@@ -115,8 +165,9 @@ public class CompaniesDBDAO implements  CompaniesDAO {
         String[] fields = {dbManager.COMPANY_ID, dbManager.NAME, dbManager.EMAIL, dbManager.PASSWORD};
         String name, email, password;
         int id;
+        Cursor cr = null;
         try {
-            Cursor cr = dbManager.getCursor(dbManager.TBL_COMPANIES, fields, null);
+             cr = dbManager.getCursor(dbManager.TBL_COMPANIES, fields, null);
             if (cr.moveToFirst()) {
                 do {
                     id = cr.getInt(0);
@@ -127,20 +178,33 @@ public class CompaniesDBDAO implements  CompaniesDAO {
                     companies.add(new Company(id, name, email, password, null));
                 } while (cr.moveToNext());
             }
+            logSystemOutMessage("companiesDBDAO getAllCompanies success");
             return companies;
         } catch (Exception e) {
             // Handle the exception or log it with an appropriate message
             e.printStackTrace(); // Example: Print the stack trace for debugging
             // You may choose to return an empty list or handle the error differently
+            logSystemOutMessage("companiesDBDAO getAllCompanies failure");
             return new ArrayList<>();
+
+        }
+        finally {
+            // Close the cursor to release resources
+            if (cr != null && !cr.isClosed()) {
+                cr.close();
+            }
+            
         }
     }
 
     @Override
     public Company getOneCompany(int companyId) {
         for (Company company : companies ) {
-            if(company.getId() == companyId)
+            if(company.getId() == companyId){
+                logSystemOutMessage("companiesDBDAO getOneCompany success");
                 return company;
+            }
+
         }
         return null;
     }

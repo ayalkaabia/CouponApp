@@ -20,6 +20,7 @@ public class CompanyFacade extends  ClientFacade implements Serializable
         {
             Company c= companiesDAO.isCompanyExists2 (email, password);
             companyID=c.getId();
+            System.out.println("company log in");
             return  true;
         }
         return  false;
@@ -38,25 +39,30 @@ public class CompanyFacade extends  ClientFacade implements Serializable
 
         }
         c1.getCoupons().add(coupon);
+        System.out.println("companyFacade addCoupon");
     }
 
 
     public  void  updateCoupon(Coupon coupon)
     {
         couponsDAO.updateCoupon(coupon);
+        System.out.println("companyFacade updateCoupon");
     }
 
 
     public  void  deleteCoupon(int couponID)
     {
         couponsDAO. deleteCoupon(couponID); // delete coupon from coupon table
+        System.out.println("companyFacade deleteCoupon");
     }
 
 
     public ArrayList<Coupon> getCompanyCoupons()
     {
         Company c1=companiesDAO.getOneCompany(companyID);
-        return  c1.getCoupons();
+        ArrayList<Coupon> coupons=c1.getCoupons();
+        System.out.println("companyFacade getCompanyCoupons");
+        return  coupons;
     }
 
     public ArrayList<Coupon> getCompanyCoupons(Category category)
@@ -71,6 +77,7 @@ public class CompanyFacade extends  ClientFacade implements Serializable
             }
 
         }
+        System.out.println("companyFacade getCompanyCoupons by category");
         return  CompanyCategory;
     }
 
@@ -86,7 +93,7 @@ public class CompanyFacade extends  ClientFacade implements Serializable
             }
 
         }
-
+        System.out.println("companyFacade getCompanyCoupons by maxprice");
         return  CompanyMaxPrice;
     }
 
@@ -95,6 +102,7 @@ public class CompanyFacade extends  ClientFacade implements Serializable
     public  Company getCompanyDetails()
     {
         Company c1=companiesDAO.getOneCompany(companyID);
+        System.out.println("companyFacade getCompanyDetails");
         return   c1;
     }
 

@@ -4,8 +4,12 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintStream;
 import java.util.ArrayList;
 
 public class CustomersDBDAO implements CustomersDAO {
@@ -16,15 +20,58 @@ public class CustomersDBDAO implements CustomersDAO {
 
     //...Singleton.............................
     private static CustomersDBDAO instance = null;
+    private static final String TAG = "CustomersDBDAO";
 
-    CustomersDBDAO(Context context) {
+    public CustomersDBDAO(Context context) {
         try {
-            dbManager=DB_Manager.getInstance(context);
+            dbManager = DB_Manager.getInstance(context);
             this.customers = getAllCustomers();
+            logSystemOutMessage("CustomersDBDAO Construction success"); // i can use this function to show all messages i want in the logcat file under the tag : CustomersDBDAO
         } catch (Exception e) {
             throw e;
         }
     }
+
+    private void logSystemOutMessage(String message) {
+        // Redirect System.out to Logcat
+        System.setOut(new PrintStream(new LogcatOutputStream()));
+
+        // Print the message
+        System.out.println(message);
+
+        // Restore the standard output
+        System.setOut(new PrintStream(new OutputStream() {
+            @Override
+            public void write(int b) throws IOException {
+                // This is needed to prevent further System.out usage from crashing
+            }
+        }));
+    }
+
+    private static class LogcatOutputStream extends OutputStream {
+        private StringBuilder buffer = new StringBuilder();
+
+        @Override
+        public void write(int b) throws IOException {
+            if (b == '\n') {
+                Log.d(TAG, buffer.toString());
+                buffer.setLength(0);
+            } else {
+                buffer.append((char) b);
+            }
+        }
+    }
+
+//
+//    CustomersDBDAO(Context context) {
+//        try {
+//            dbManager=DB_Manager.getInstance(context);
+//            this.customers = getAllCustomers();
+//            System.out.println("CustomersDBDAO Construction success");
+//        } catch (Exception e) {
+//            throw e;
+//        }
+//    }
 
     public static CustomersDBDAO getInstance(Context context) {
         if (instance == null) instance = new CustomersDBDAO(context);
@@ -66,6 +113,7 @@ public class CustomersDBDAO implements CustomersDAO {
 
             SQLiteDatabase db = dbManager.getWritableDatabase();
             db.insert(dbManager.TBL_CUSTOMERS, null, cv);
+            logSystemOutMessage("CustomersDBDAO addCustomer success");
         }
         else
             try {
@@ -99,6 +147,7 @@ public class CustomersDBDAO implements CustomersDAO {
 
             SQLiteDatabase db = dbManager.getWritableDatabase();
             db.update(dbManager.TBL_CUSTOMERS, cv, dbManager.CUSTOMER_ID + "=" + customer.getId(), null);
+            logSystemOutMessage("CustomersDBDAO updateCustomer success");
         }
         else
             try {
@@ -116,6 +165,7 @@ public class CustomersDBDAO implements CustomersDAO {
             customers.remove(toBeDeleted);
             SQLiteDatabase db = dbManager.getWritableDatabase();
             db.delete(dbManager.TBL_CUSTOMERS, dbManager.CUSTOMER_ID + "=" + customerID, null);
+            logSystemOutMessage("CustomersDBDAO deleteCustomer success");
         } else {
             try {
                 throw new DataNotExists("Employee does not exist!");
@@ -144,6 +194,7 @@ public class CustomersDBDAO implements CustomersDAO {
                     password = cr.getString(4);
                     customers1.add(new Customer(id,fName,lName,email,password));
                 } while (cr.moveToNext());
+            logSystemOutMessage("CustomersDBDAO getAllCustomers success");
             return customers1;
         }catch(Exception e){
             throw e;
@@ -154,6 +205,7 @@ public class CustomersDBDAO implements CustomersDAO {
     public Customer getOneCustomer(int customerID) {
         for (Customer customer : customers ) {
             if(customer.getId() == customerID) {
+                logSystemOutMessage("CustomersDBDAO getOneCustomer success");
                 return customer;
             }
         }

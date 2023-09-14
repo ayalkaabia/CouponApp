@@ -7,8 +7,12 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -23,12 +27,60 @@ public class CouponsDBDAO implements CouponsDAO {
 
 
     //...Singleton.............................
-    private CouponsDBDAO(Context context) throws ParseException {
-        coupons=getAllCoupons();
-        dbManager = DB_Manager.getInstance(context);
-       // coupons = new ArrayList<Coupon>();
-        customersDAO = new CustomersDBDAO(context);
+//    private CouponsDBDAO(Context context) throws ParseException {
+//        coupons=getAllCoupons();
+//        dbManager = DB_Manager.getInstance(context);
+//       // coupons = new ArrayList<Coupon>();
+//        customersDAO = new CustomersDBDAO(context);
+//        System.out.println("couponsDBDAO construction was a success");
+//    }
+
+    private static final String TAG = "CouponsDBDAO";
+
+    public CouponsDBDAO(Context context) throws ParseException {
+        try {
+            coupons=getAllCoupons();
+            dbManager = DB_Manager.getInstance(context);
+            // coupons = new ArrayList<Coupon>();
+            customersDAO = new CustomersDBDAO(context);
+            logSystemOutMessage("CouponsDBDAO Construction success");
+        } catch (Exception e) {
+            throw e;
+        }
     }
+
+    private void logSystemOutMessage(String message) {
+        // Redirect System.out to Logcat
+        System.setOut(new PrintStream(new CouponsDBDAO.LogcatOutputStream()));
+
+        // Print the message
+        System.out.println(message);
+
+        // Restore the standard output
+        System.setOut(new PrintStream(new OutputStream() {
+            @Override
+            public void write(int b) throws IOException {
+                // This is needed to prevent further System.out usage from crashing
+            }
+        }));
+    }
+
+    private static class LogcatOutputStream extends OutputStream {
+        private StringBuilder buffer = new StringBuilder();
+
+        @Override
+        public void write(int b) throws IOException {
+            if (b == '\n') {
+                Log.d(TAG, buffer.toString());
+                buffer.setLength(0);
+            } else {
+                buffer.append((char) b);
+            }
+        }
+    }
+
+
+
 
 
     public static CouponsDBDAO getInstance(Context context) throws SQLException, ParseException {
@@ -66,6 +118,7 @@ public class CouponsDBDAO implements CouponsDAO {
             cv.put(dbManager.COUPONS_IMAGE, coupon.getImage());
 
             dbManager.getWritableDatabase().insert(dbManager.TBL_COUPONS, null, cv);
+            logSystemOutMessage("CouponsDBDAO addCoupon success");
         } else
             try {
                 throw new DataExists("This employee already exists !");
@@ -119,6 +172,7 @@ public class CouponsDBDAO implements CouponsDAO {
 
             SQLiteDatabase db = dbManager.getWritableDatabase();
             db.update(dbManager.TBL_COUPONS, cv, dbManager.COUPONS_ID + "= '" + coupon.getId() + "'", null);
+            logSystemOutMessage("CouponsDBDAO updateCoupon success");
         } else
             try {
                 throw new DataNotExists("Employee not exists !");
@@ -135,6 +189,7 @@ public class CouponsDBDAO implements CouponsDAO {
             coupons.remove(toBeDeleted);
             SQLiteDatabase db = dbManager.getWritableDatabase();
             db.delete(dbManager.TBL_COUPONS, dbManager.COUPONS_ID + "= '" + CouponID + "'", null);
+            logSystemOutMessage("CouponsDBDAO deleteCoupon success");
         } else {
             try {
                 throw new DataNotExists("Employee does not exist!");
@@ -188,6 +243,7 @@ public class CouponsDBDAO implements CouponsDAO {
 
                     coupons.add(new Coupon(couponsId, companyId, categoryType, title, description, startDate, endDate, amount, price, couponsImage));
                 } while (cr.moveToNext());
+            logSystemOutMessage("CouponsDBDAO getAllCoupons success");
             return coupons;
         } catch (Exception e) {
             throw e;
@@ -200,8 +256,10 @@ public class CouponsDBDAO implements CouponsDAO {
     @Override
     public Coupon getOneCoupon(int couponID) {
         for (Coupon coupon : coupons) {
-            if (coupon.getId() == couponID)
+            if (coupon.getId() == couponID){
+                logSystemOutMessage("CouponsDBDAO getOneCoupon success");
                 return coupon;
+            }
         }
         return null;
 
@@ -221,6 +279,7 @@ public class CouponsDBDAO implements CouponsDAO {
             if (coupon.getId() == couponID) { //ADDING THE COUPON TO THE CUSTOMER COUPONS???
                 customerCoupons.add(coupon);
                 coupon.setAmount(coupon.getAmount() - 1);
+                logSystemOutMessage("CouponsDBDAO addCouponPurchase success");
             }
 
     }
@@ -236,6 +295,7 @@ public class CouponsDBDAO implements CouponsDAO {
             if (coupon.getId() == couponID) {
                 customerCoupons.remove(coupon);
                 coupon.setAmount(coupon.getAmount() + 1);
+                logSystemOutMessage("CouponsDBDAO deleteCouponPurchase success");
             }
     }
 
@@ -249,6 +309,7 @@ public class CouponsDBDAO implements CouponsDAO {
                 deleteCouponPurchase(customerId, couponID);
 
             } while (cr.moveToNext());
+        logSystemOutMessage("CouponsDBDAO deleteCouponPurchase by couponID success");
     }
 
     public void deleteCouponsPurchaseByCustomerID(int customerId) {
@@ -261,6 +322,7 @@ public class CouponsDBDAO implements CouponsDAO {
                 deleteCouponPurchase(customerId, couponID);
 
             } while (cr.moveToNext());
+        logSystemOutMessage("CouponsDBDAO deleteCouponPurchase by customerID success");
     }
 
     int getCategoryID(Category category){

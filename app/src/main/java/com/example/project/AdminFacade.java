@@ -53,13 +53,16 @@ public class AdminFacade extends ClientFacade implements Serializable {
                 }
             }
             companiesDAO.deleteCompany(companyID);
+            System.out.println("Deleted a company");
         }
         else
             throw new DataNotExists("company doesn't exists");
     }
     public  ArrayList<Company> getAllCompanies() throws DataNotExists {
         if(companiesDAO.getAllCompanies()!=null) {
-            return companiesDAO.getAllCompanies();
+            ArrayList<Company> companies1=companiesDAO.getAllCompanies();
+            System.out.println("got all companies");
+            return companies1;
         }
         else
             throw new DataNotExists("There is no companies");
@@ -67,6 +70,7 @@ public class AdminFacade extends ClientFacade implements Serializable {
 
     public Company getOneCompany(int companyID) throws DataNotExists {
         if(companiesDAO.getOneCompany(companyID)!=null) {
+            System.out.println("got one of the companies");
             return companiesDAO.getOneCompany(companyID);
         }
         else
@@ -80,20 +84,26 @@ public class AdminFacade extends ClientFacade implements Serializable {
                 throw new DataExists("customer Email already exists");
         }
         customersDAO.addCustomer(customer);
+        System.out.println("added a customer");
     }
     public void updateCustomer(Customer customer) throws DataNotExists {
         customersDAO.updateCustomer(customer);
+        System.out.println("updated a customer");
+
     }
     public void DeleteCustomer(int customerID) throws DataNotExists {
         if(customersDAO.getOneCustomer(customerID)!=null) {
             couponsDAO.deleteCouponsPurchaseByCustomerID(customerID);
             customersDAO.deleteCustomer(customerID);
+            System.out.println("deleted a customer");
+
         }
         else
             throw new DataNotExists("Customer doesn't exists");
     }
     public ArrayList<Customer> getAllCustomers() throws DataNotExists {
         if(customersDAO.getAllCustomers()!=null) {
+            System.out.println("got all customers");
             return customersDAO.getAllCustomers();
         }
         else
@@ -101,6 +111,7 @@ public class AdminFacade extends ClientFacade implements Serializable {
     }
     public Customer getOneCustomer(int customerID) throws DataNotExists {
         if(customersDAO.getOneCustomer(customerID)!=null) {
+            System.out.println("got one customer");
             return customersDAO.getOneCustomer(customerID);
         }
         else

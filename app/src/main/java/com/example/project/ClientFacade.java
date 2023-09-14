@@ -14,7 +14,7 @@ public abstract class ClientFacade {
 
     public ClientFacade(Context context) throws ParseException {
         this.customersDAO = CustomersDBDAO.getInstance(context);
-        this.couponsDAO = CouponsDBDAO.getInstance(context);
+       // this.couponsDAO = CouponsDBDAO.getInstance(context);
         this.companiesDAO = CompaniesDBDAO.getInstance(context);
 
 

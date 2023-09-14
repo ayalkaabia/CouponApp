@@ -21,6 +21,7 @@ public class CustomersFacade extends ClientFacade implements Serializable {
         if(customer==null) return false;
         //if customer logged in then the customerID variable is the id of the costumer that logged in
         this.customerID=customer.getId();
+        System.out.println("customer logged in");
         return true;
     }
 
@@ -38,6 +39,8 @@ public class CustomersFacade extends ClientFacade implements Serializable {
 //        }
         //purchase the coupon and link the coupon id with the customer id + reduce quantity by 1
         couponsDAO.addCouponPurchase(customerID, coupon.getId());
+        System.out.println("customer purchased a coupon");
+
 
 
     }
@@ -46,6 +49,7 @@ public class CustomersFacade extends ClientFacade implements Serializable {
         ArrayList<Customer> customers1=customersDAO.getAllCustomers();
         for(Customer customer:customers1){
             if(customer.getId()==customerID){
+                System.out.println("got customer coupons using getCustomerCoupons");
                 return customer.getCoupons();
             }
         }
@@ -60,6 +64,7 @@ public class CustomersFacade extends ClientFacade implements Serializable {
                 returnedCoupons.add(coupon);
             }
         }
+        System.out.println("got customer coupons using getCustomerCoupons by category");
         return returnedCoupons;
     }
     ArrayList<Coupon> getCustomerCoupons(double maxPrice) throws ParseException {
@@ -70,6 +75,7 @@ public class CustomersFacade extends ClientFacade implements Serializable {
                 returnedCoupons.add(coupon);
             }
         }
+        System.out.println("got customer coupons using getCustomerCoupons by maxprice");
         return returnedCoupons;
 
     }
@@ -77,9 +83,11 @@ public class CustomersFacade extends ClientFacade implements Serializable {
         ArrayList<Customer> customers1=customersDAO.getAllCustomers();
         for(Customer customer:customers1){
             if(customer.getId()==customerID){
+                System.out.println("got customer details");
                 return customer;
             }
         }
+
         return null;
     }
 
