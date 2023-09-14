@@ -19,10 +19,10 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class CouponsDBDAO implements CouponsDAO {
-    ArrayList<Coupon> coupons;
+    private ArrayList<Coupon> coupons;
     private static CouponsDBDAO instance = null;
     DB_Manager dbManager;
-    private Context context;
+    private static Context context;
     private CustomersDAO customersDAO;
 
 
@@ -39,8 +39,8 @@ public class CouponsDBDAO implements CouponsDAO {
 
     public CouponsDBDAO(Context context) throws ParseException {
         try {
-            coupons=getAllCoupons();
             dbManager = DB_Manager.getInstance(context);
+            coupons=getAllCoupons();
             // coupons = new ArrayList<Coupon>();
             customersDAO = new CustomersDBDAO(context);
             logSystemOutMessage("CouponsDBDAO Construction success");
@@ -212,17 +212,19 @@ public class CouponsDBDAO implements CouponsDAO {
         String category;
         Double price;
         int couponsId, companyId, categoryId;
-        int id;
         Category categoryType = null;
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String[] fields1 ={dbManager.CATEGORY_ID,dbManager.CATEGORY_NAME};
+        Cursor cr=null,cr2=null;
         try {
-            Cursor cr = dbManager.getCursor(dbManager.TBL_COUPONS, fields, null);
+            cr = dbManager.getCursor(dbManager.TBL_COUPONS, fields, null);
             if (cr.moveToFirst())
                 do {
                     couponsId = cr.getInt(0);
                     companyId = cr.getInt(1);
                     categoryId = cr.getInt(2);
-                    Cursor cr2 = dbManager.getCursor(dbManager.TBL_CATEGORIES, fields, dbManager.CATEGORY_ID + "= '" + categoryId + "'");
+                    //to find categoryType from categoryID
+                    cr2 = dbManager.getCursor(dbManager.TBL_CATEGORIES, fields1, dbManager.CATEGORY_ID + "= '" + categoryId + "'");
                     category = cr2.getString(1);  // we should be wary that cr2 is a new cursor ..
                     if (category.equals("FOOD"))
                         categoryType = Category.FOOD;
@@ -232,6 +234,7 @@ public class CouponsDBDAO implements CouponsDAO {
                         categoryType = Category.RESTAURANT;
                     if (category.equals("VACATION"))
                         categoryType = Category.VACATION;
+
                     title = cr.getString(3);
                     description = cr.getString(4);
                     startDate = sdf.parse(cr.getString(5));
@@ -240,13 +243,18 @@ public class CouponsDBDAO implements CouponsDAO {
                     price = cr.getDouble(8);
                     couponsImage = cr.getString(9);
 
-
                     coupons.add(new Coupon(couponsId, companyId, categoryType, title, description, startDate, endDate, amount, price, couponsImage));
                 } while (cr.moveToNext());
             logSystemOutMessage("CouponsDBDAO getAllCoupons success");
             return coupons;
         } catch (Exception e) {
             throw e;
+        }
+        finally {
+            if(cr!=null)
+                cr.close();
+            if(cr2!=null)
+                cr2.close();
         }
     }
 

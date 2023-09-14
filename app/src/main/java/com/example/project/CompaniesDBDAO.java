@@ -13,11 +13,13 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.ParseException;
 import java.util.ArrayList;
 
 public class CompaniesDBDAO implements  CompaniesDAO {
     DB_Manager dbManager;
     ArrayList<Company> companies;
+    private static Context context;
     //...Singleton.............................
     private static CompaniesDBDAO instance = null;
 
@@ -29,10 +31,11 @@ public class CompaniesDBDAO implements  CompaniesDAO {
 //    }
     private static final String TAG = "CompaniesDBDAO";
 
-    public CompaniesDBDAO(Context context) {
+    public CompaniesDBDAO(Context context) throws ParseException {
         try {
-            companies=getAllCompanies();
             dbManager= DB_Manager.getInstance(context);
+            companies=getAllCompanies();
+
             logSystemOutMessage("CompaniesDBDAO Construction success");
         } catch (Exception e) {
             throw e;
@@ -69,7 +72,7 @@ public class CompaniesDBDAO implements  CompaniesDAO {
         }
     }
 
-    public static CompaniesDBDAO getInstance(Context context) {
+    public static CompaniesDBDAO getInstance(Context context) throws ParseException {
         if (instance == null) instance = new CompaniesDBDAO(context);
         return instance;
     }
@@ -159,13 +162,14 @@ public class CompaniesDBDAO implements  CompaniesDAO {
 
 
     @Override
-    public ArrayList<Company> getAllCompanies() {
+    public ArrayList<Company> getAllCompanies() throws ParseException {
         companies = new ArrayList<>();
-
         String[] fields = {dbManager.COMPANY_ID, dbManager.NAME, dbManager.EMAIL, dbManager.PASSWORD};
         String name, email, password;
         int id;
         Cursor cr = null;
+        ArrayList<Coupon> allCoupons=null,companyCoupons=null;
+        CouponsDBDAO couponsDBDAO=CouponsDBDAO.getInstance(context);
         try {
              cr = dbManager.getCursor(dbManager.TBL_COMPANIES, fields, null);
             if (cr.moveToFirst()) {
@@ -175,7 +179,13 @@ public class CompaniesDBDAO implements  CompaniesDAO {
                     email = cr.getString(2);
                     password = cr.getString(3);
                     // Adjust the last argument as needed based on the Company class constructor
-                    companies.add(new Company(id, name, email, password, null));
+                    allCoupons=couponsDBDAO.getAllCoupons(); //contains all coupons
+                    for(Coupon coupon:allCoupons){
+                        if(coupon.getCompanyID()==id){
+                            companyCoupons.add(coupon);
+                        }
+                    }
+                    companies.add(new Company(id, name, email, password, companyCoupons));
                 } while (cr.moveToNext());
             }
             logSystemOutMessage("companiesDBDAO getAllCompanies success");

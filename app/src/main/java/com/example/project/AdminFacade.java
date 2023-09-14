@@ -28,7 +28,7 @@ public class AdminFacade extends ClientFacade implements Serializable {
             return true;
         return false;
     }
-    public void addCompany(Company company) throws DataExists, SQLException {
+    public void addCompany(Company company) throws DataExists, SQLException, ParseException {
         for(Company company1 : companiesDAO.getAllCompanies()){
             if(company1.getName().equals(company.getName()))
                 throw new DataExists("company already exists");
@@ -58,7 +58,7 @@ public class AdminFacade extends ClientFacade implements Serializable {
         else
             throw new DataNotExists("company doesn't exists");
     }
-    public  ArrayList<Company> getAllCompanies() throws DataNotExists {
+    public  ArrayList<Company> getAllCompanies() throws DataNotExists, ParseException {
         if(companiesDAO.getAllCompanies()!=null) {
             ArrayList<Company> companies1=companiesDAO.getAllCompanies();
             System.out.println("got all companies");

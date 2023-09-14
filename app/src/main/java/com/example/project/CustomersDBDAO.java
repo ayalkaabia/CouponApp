@@ -177,14 +177,13 @@ public class CustomersDBDAO implements CustomersDAO {
 
     @Override
     public ArrayList<Customer> getAllCustomers() {
-        ArrayList<Customer> customers1 = new ArrayList<>();
-
-        String[] fields = {"id", "fName","lName","email", "password"};
+         customers = new ArrayList<>();
+        String[] fields = {dbManager.CUSTOMER_ID, dbManager.F_NAME,dbManager.L_NAME,dbManager.EMAIL,dbManager.PASSWORD};
         String  fName,lName, email, password;
         int id;
-
+        Cursor cr = null;
         try {
-            Cursor cr = dbManager.getCursor(dbManager.TBL_CUSTOMERS, fields, null);
+             cr = dbManager.getCursor(dbManager.TBL_CUSTOMERS, fields, null);
             if (cr.moveToFirst())
                 do {
                     id = cr.getInt(0);
@@ -192,12 +191,16 @@ public class CustomersDBDAO implements CustomersDAO {
                     lName=cr.getString(2);
                     email = cr.getString(3);
                     password = cr.getString(4);
-                    customers1.add(new Customer(id,fName,lName,email,password));
+                    customers.add(new Customer(id,fName,lName,email,password));
                 } while (cr.moveToNext());
             logSystemOutMessage("CustomersDBDAO getAllCustomers success");
-            return customers1;
+            return customers;
         }catch(Exception e){
             throw e;
+        }finally {
+            if(cr!=null){
+                cr.close();
+            }
         }
     }
 

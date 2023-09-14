@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import java.sql.SQLException;
 import java.text.ParseException;
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
     Button btnLogin;
@@ -34,11 +35,22 @@ public class MainActivity extends AppCompatActivity {
         //AND TRY ADMIN FACADE FUNCTIONS WWITH PRINTS IN THE END
         try {
             CustomersFacade customersFacade= new CustomersFacade(this);
-//            AdminFacade adminFacade= AdminFacade.getInstance(this);
-//            CompanyFacade companyFacade= new CompanyFacade((this));
+            AdminFacade adminFacade= AdminFacade.getInstance(this);
+            CompanyFacade companyFacade= new CompanyFacade((this));
+            Company company=new Company(1,"ayal","ayal","ayal",null);
+            adminFacade.addCompany(company);
+            ArrayList<Company> companyArrayList=adminFacade.getAllCompanies();
+            for(Company company1:companyArrayList){
+
+            }
         } catch (ParseException e) {
             throw new RuntimeException(e);
         } //catch (SQLException e) {
+        catch (SQLException e) {
+            throw new RuntimeException(e);
+        } catch (DataExists e) {
+            throw new RuntimeException(e);
+        }
 //            throw new RuntimeException(e);
 //        }
 

@@ -93,10 +93,6 @@ public class DB_Manager extends SQLiteOpenHelper {
 
     private DB_Manager(Context context) {
         super(context, DB_NAME, null, DB_VER);
-        try {
-        } catch (Exception e) {
-            throw e;
-        }
     }
 
     public static DB_Manager getInstance(Context context) {
@@ -136,14 +132,15 @@ public class DB_Manager extends SQLiteOpenHelper {
         strQry += " FROM " + tableName;
         if (where != null && !where.isEmpty())
             strQry += " " + where;
-
+        SQLiteDatabase db=null;
         try {
-            SQLiteDatabase db = this.getReadableDatabase();
+            db = this.getReadableDatabase();
             Cursor cr = db.rawQuery(strQry, null);
             return cr;
         } catch (Exception e) {
             throw e;
         }
+
     }
 
 
