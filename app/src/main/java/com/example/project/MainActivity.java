@@ -32,6 +32,15 @@ public class MainActivity extends AppCompatActivity {
         db = DB_Manager.getInstance(this);
         //CREATE INSTANCES OF CUSTOMERDBDAO AND COUPONDBDAO AND COMPANYDBDAO AND TRY FUNCTIONS
         //AND TRY ADMIN FACADE FUNCTIONS WWITH PRINTS IN THE END
+        try {
+            CustomersFacade customersFacade= new CustomersFacade(this);
+//            AdminFacade adminFacade= AdminFacade.getInstance(this);
+//            CompanyFacade companyFacade= new CompanyFacade((this));
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        } //catch (SQLException e) {
+//            throw new RuntimeException(e);
+//        }
 
 
         rgUserType = findViewById(R.id.main_rgUserType);
