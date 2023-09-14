@@ -18,9 +18,7 @@ public class CustomersDBDAO implements CustomersDAO {
     private static CustomersDBDAO instance = null;
 
     CustomersDBDAO(Context context) {
-
         try {
-
             dbManager=DB_Manager.getInstance(context);
             this.customers = getAllCustomers();
         } catch (Exception e) {

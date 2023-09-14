@@ -2,6 +2,7 @@ package com.example.project;
 import android.content.Context;
 
 import java.sql.SQLException;
+import java.text.ParseException;
 
 
 public class LoginManager {
@@ -19,7 +20,7 @@ public class LoginManager {
         return instance;
     }
 
-    public Object login(String email, String password, ClientType clientType) throws SQLException {
+    public Object login(String email, String password, ClientType clientType) throws SQLException, ParseException {
 
         switch (clientType) {
             case ADMINISTRATOR:

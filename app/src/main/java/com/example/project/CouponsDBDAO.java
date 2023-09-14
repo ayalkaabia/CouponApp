@@ -23,15 +23,15 @@ public class CouponsDBDAO implements CouponsDAO {
 
 
     //...Singleton.............................
-    private CouponsDBDAO(Context context) {
-        //companies=getAllCompanies();
+    private CouponsDBDAO(Context context) throws ParseException {
+        coupons=getAllCoupons();
         dbManager = DB_Manager.getInstance(context);
-        coupons = new ArrayList<Coupon>();
+       // coupons = new ArrayList<Coupon>();
         customersDAO = new CustomersDBDAO(context);
     }
 
 
-    public static CouponsDBDAO getInstance(Context context) throws SQLException {
+    public static CouponsDBDAO getInstance(Context context) throws SQLException, ParseException {
         if (instance == null) instance = new CouponsDBDAO(context);
         return instance;
     }
@@ -148,7 +148,7 @@ public class CouponsDBDAO implements CouponsDAO {
 
     @Override
     public ArrayList<Coupon> getAllCoupons() throws ParseException {
-        ArrayList<Coupon> coupons1 = new ArrayList<>();
+        coupons = new ArrayList<>();
         String[] fields = {dbManager.COUPONS_ID, dbManager.KEY_COMPANY_ID_FK, dbManager.KEY_CATEGORY_ID_FK, dbManager.COUPONS_TITLE,
                 dbManager.COUPONS_DESCRIPTION, dbManager.COUPONS_START_DATE, dbManager.COUPONS_END_DATE, dbManager.COUPONS_AMOUNT, dbManager.COUPONS_PRICE, dbManager.COUPONS_IMAGE};
         String title, description, couponsImage;
@@ -161,14 +161,14 @@ public class CouponsDBDAO implements CouponsDAO {
         Category categoryType = null;
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         try {
-            Cursor cr = dbManager.getCursor(dbManager.TBL_COMPANIES, fields, null);
+            Cursor cr = dbManager.getCursor(dbManager.TBL_COUPONS, fields, null);
             if (cr.moveToFirst())
                 do {
                     couponsId = cr.getInt(0);
                     companyId = cr.getInt(1);
                     categoryId = cr.getInt(2);
                     Cursor cr2 = dbManager.getCursor(dbManager.TBL_CATEGORIES, fields, dbManager.CATEGORY_ID + "= '" + categoryId + "'");
-                    category = cr2.getString(3);
+                    category = cr2.getString(1);  // we should be wary that cr2 is a new cursor ..
                     if (category.equals("FOOD"))
                         categoryType = Category.FOOD;
                     if (category.equals("ELECTRICITY"))
@@ -177,18 +177,18 @@ public class CouponsDBDAO implements CouponsDAO {
                         categoryType = Category.RESTAURANT;
                     if (category.equals("VACATION"))
                         categoryType = Category.VACATION;
-                    title = cr.getString(4);
-                    description = cr.getString(5);
-                    startDate = sdf.parse(cr.getString(6));
-                    endDate = sdf.parse(cr.getString(7));
-                    amount = cr.getInt(8);
-                    price = cr.getDouble(9);
-                    couponsImage = cr.getString(10);
+                    title = cr.getString(3);
+                    description = cr.getString(4);
+                    startDate = sdf.parse(cr.getString(5));
+                    endDate = sdf.parse(cr.getString(6));
+                    amount = cr.getInt(7);
+                    price = cr.getDouble(8);
+                    couponsImage = cr.getString(9);
 
 
-                    coupons1.add(new Coupon(couponsId, companyId, categoryType, title, description, startDate, endDate, amount, price, couponsImage));
+                    coupons.add(new Coupon(couponsId, companyId, categoryType, title, description, startDate, endDate, amount, price, couponsImage));
                 } while (cr.moveToNext());
-            return coupons1;
+            return coupons;
         } catch (Exception e) {
             throw e;
         }

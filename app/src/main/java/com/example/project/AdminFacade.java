@@ -13,11 +13,11 @@ public class AdminFacade extends ClientFacade implements Serializable {
     //...Singleton.............................
     private static AdminFacade instance = null;
 
-    private AdminFacade(Context context) throws SQLException {
+    private AdminFacade(Context context) throws SQLException, ParseException {
         super(context);
     }
 
-    public static AdminFacade getInstance(Context context) throws SQLException {
+    public static AdminFacade getInstance(Context context) throws SQLException, ParseException {
         if (instance == null) instance = new AdminFacade(context);
         return instance;
     }
@@ -36,9 +36,11 @@ public class AdminFacade extends ClientFacade implements Serializable {
                 throw new DataExists("company's email already exists");
         }
         companiesDAO.addCompany(company);
+        System.out.println("Added a company");
     }
     public void updateCompany(Company company) throws DataNotExists{
         companiesDAO.updateCompany(company);
+        System.out.println("updated a company");
     }
     public void deleteCompany(int companyID) throws ParseException, DataNotExists {
 

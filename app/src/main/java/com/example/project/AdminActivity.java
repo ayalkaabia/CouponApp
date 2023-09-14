@@ -15,13 +15,12 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import java.sql.SQLException;
+import java.text.ParseException;
 
 public class AdminActivity extends AppCompatActivity {
 
     Button btnBack,addCompany,updateCompany,deleteCompany,addCustomer,updateCustomer,deleteCustomer,getCompany;
 
-
-    DB_Manager db=DB_Manager.getInstance(this);
     AdminFacade adminFacade;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,8 +49,10 @@ public class AdminActivity extends AppCompatActivity {
 
         //we should get the admin facade instance from the intent or maybe we dont need the intent at all??
         try {
-            adminFacade=AdminFacade.getInstance(this);
+            adminFacade=AdminFacade.getInstance(AdminActivity.this);
         } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } catch (ParseException e) {
             throw new RuntimeException(e);
         }
 
@@ -128,13 +129,14 @@ public class AdminActivity extends AppCompatActivity {
         {
             if(view.getId() == addCompany.getId())
             {
-                Intent intent = new Intent(AdminActivity.this, AddNewCompanyActivity.class);
-                startActivityForResult(intent,1);
+                Toast.makeText(AdminActivity.this, "TRYING TO ADD A COMPANY", Toast.LENGTH_SHORT).show();
+//                Intent intent = new Intent(AdminActivity.this, AddNewCompanyActivity.class);
+//                startActivityForResult(intent,1);
             }
-            else if(view.getId()==getCompany.getId()) {
-                Intent intent = new Intent(AdminActivity.this, GetCompanyActivity.class);
-                startActivity(intent);
-            }
+//            else if(view.getId()==getCompany.getId()) {
+//                Intent intent = new Intent(AdminActivity.this, GetCompanyActivity.class);
+//                startActivity(intent);
+//            }
 //            else if(view.getId() == addCustomer.getId())
 //            {
 //                Intent intent = new Intent(AdminActivity.this, AddNewCustomerActivity.class);

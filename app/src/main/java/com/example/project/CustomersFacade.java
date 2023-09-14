@@ -9,7 +9,7 @@ import java.util.ArrayList;
 public class CustomersFacade extends ClientFacade implements Serializable {
     private int customerID;
 
-    public CustomersFacade(Context context) {
+    public CustomersFacade(Context context) throws ParseException {
         super(context);
     }
 

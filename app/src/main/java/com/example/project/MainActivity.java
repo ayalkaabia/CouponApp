@@ -16,6 +16,7 @@ import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import java.sql.SQLException;
+import java.text.ParseException;
 
 public class MainActivity extends AppCompatActivity {
     Button btnLogin;
@@ -29,6 +30,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         db = DB_Manager.getInstance(this);
+        //CREATE INSTANCES OF CUSTOMERDBDAO AND COUPONDBDAO AND COMPANYDBDAO AND TRY FUNCTIONS
+        //AND TRY ADMIN FACADE FUNCTIONS WWITH PRINTS IN THE END
+
 
         rgUserType = findViewById(R.id.main_rgUserType);
         etUN = findViewById(R.id.main_etUN);
@@ -49,6 +53,8 @@ public class MainActivity extends AppCompatActivity {
                     o = LoginManager.getInstance(MainActivity.this).login(un, pass, userType);
                 } catch (SQLException e) {
                     throw new RuntimeException(e);
+                } catch (ParseException e) {
+                    throw new RuntimeException(e);
                 }
                 if(o == null) {
                     Toast.makeText(MainActivity.this, "Error User Name or Password", Toast.LENGTH_SHORT).show();
@@ -56,10 +62,10 @@ public class MainActivity extends AppCompatActivity {
                 }
                 if(o instanceof AdminFacade)
                     OpenAdminActivity((AdminFacade)o);
-                if(o instanceof CustomersFacade)
-                    OpenCustomerActivity((CustomersFacade)o);
-                if(o instanceof CompanyFacade)
-                    OpenCompanyActivity((CompanyFacade)o);
+//                if(o instanceof CustomersFacade)
+//                    OpenCustomerActivity((CustomersFacade)o);
+//                if(o instanceof CompanyFacade)
+//                    OpenCompanyActivity((CompanyFacade)o);
             }
         });
 
@@ -93,17 +99,17 @@ public class MainActivity extends AppCompatActivity {
     );
     private void OpenAdminActivity(AdminFacade adminFacade) {
         Intent intent = new Intent(MainActivity.this, AdminActivity.class);
-        intent.putExtra("admin",adminFacade );
+        intent.putExtra("adminFacade",adminFacade );
         startActivity(intent);
     }
-    private void OpenCustomerActivity(CustomersFacade customersFacade) {
-        Intent intent = new Intent(MainActivity.this, CustomerActivity.class);
-        intent.putExtra("customer", customersFacade);
-        startActivity(intent);
-    }
-    private void OpenCompanyActivity(CompanyFacade companyFacade) {
-        Intent intent = new Intent(MainActivity.this, CompanyActivity.class);
-        intent.putExtra("company", companyFacade);
-        startActivity(intent);
-    }
+//    private void OpenCustomerActivity(CustomersFacade customersFacade) {
+//        Intent intent = new Intent(MainActivity.this, CustomerActivity.class);
+//        intent.putExtra("customersFacade", customersFacade);
+//        startActivity(intent);
+//    }
+//    private void OpenCompanyActivity(CompanyFacade companyFacade) {
+//        Intent intent = new Intent(MainActivity.this, CompanyActivity.class);
+//        intent.putExtra("companyFacade", companyFacade);
+//        startActivity(intent);
+//    }
 }
