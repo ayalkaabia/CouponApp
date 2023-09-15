@@ -199,10 +199,6 @@ public class CustomersDBDAO implements CustomersDAO {
             return customers;
         }catch(Exception e){
             throw e;
-        }finally {
-            if(cr!=null){
-                cr.close();
-            }
         }
     }
 

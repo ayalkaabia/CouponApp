@@ -263,12 +263,7 @@ public class CouponsDBDAO implements CouponsDAO {
         } catch (Exception e) {
             throw e;
         }
-        finally {
-            if(cr!=null)
-                cr.close();
-            if(cr2!=null)
-                cr2.close();
-        }
+
     }
 
 
@@ -345,7 +340,7 @@ public class CouponsDBDAO implements CouponsDAO {
 
             } while (cr.moveToNext());
         logSystemOutMessage("CouponsDBDAO deleteCouponPurchase by couponID success");
-        cr.close();
+
     }
 
     public void deleteCouponsPurchaseByCustomerID(int customerId) {
@@ -364,7 +359,7 @@ public class CouponsDBDAO implements CouponsDAO {
 
             } while (cr.moveToNext());
         logSystemOutMessage("CouponsDBDAO deleteCouponPurchase by customerID success");
-        cr.close();
+
     }
 
     int getCategoryID(Category category){
@@ -390,7 +385,8 @@ public class CouponsDBDAO implements CouponsDAO {
         cr.moveToFirst();
         category_id = (int) cr.getInt(0);
 
-        cr.close();
+
+
         return category_id;
     }
 
