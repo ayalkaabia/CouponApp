@@ -101,6 +101,7 @@ public class CustomersDBDAO implements CustomersDAO {
 
     @Override
     public void addCustomer(Customer customer)  {
+        int affectedRows;
         Customer newCustomer = getOneCustomer(customer.getId());
         if (newCustomer==null) {
             customers.add(customer);
@@ -112,15 +113,16 @@ public class CustomersDBDAO implements CustomersDAO {
             cv.put(dbManager.PASSWORD, customer.getPassword());
 
             SQLiteDatabase db = dbManager.getWritableDatabase();
-            db.insert(dbManager.TBL_CUSTOMERS, null, cv);
-            logSystemOutMessage("CustomersDBDAO addCustomer success");
+            affectedRows = (int) db.insert(dbManager.TBL_CUSTOMERS, null, cv);
+            logSystemOutMessage("CustomersDBDAO addCustomer success" + affectedRows);
         }
-        else
+        else {
             try {
                 throw new DataExists("This customer already exists !");
             } catch (DataExists e) {
                 throw new RuntimeException(e);
             }
+        }
 
     }
 
@@ -134,7 +136,7 @@ public class CustomersDBDAO implements CustomersDAO {
                     customer1.setfName(customer.getfName());
                     customer1.setlName(customer.getlName());
                     customer1.setEmail(customer.getEmail());
-                  //  customer1.setPassword(customer.getPassword());
+                    customer1.setPassword(customer.getPassword());
                 }
             }
 
@@ -143,7 +145,7 @@ public class CustomersDBDAO implements CustomersDAO {
             cv.put(dbManager.F_NAME, customer.getfName());
             cv.put(dbManager.L_NAME, customer.getlName());
             cv.put(dbManager.EMAIL, customer.getEmail());
-          //  cv.put(dbManager.PASSWORD, customer.getPassword());
+            cv.put(dbManager.PASSWORD, customer.getPassword());
 
             SQLiteDatabase db = dbManager.getWritableDatabase();
             db.update(dbManager.TBL_CUSTOMERS, cv, dbManager.CUSTOMER_ID + "=" + customer.getId(), null);

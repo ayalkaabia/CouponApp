@@ -8,10 +8,12 @@ import java.util.ArrayList;
 
 public class CompanyFacade extends  ClientFacade implements Serializable
 {
-    private int companyID;
+    private int companyID=13;
+    private static Context context;
 
     public CompanyFacade(Context context) throws ParseException {
         super(context);
+        this.context = context;
     }
 
     boolean login(String email, String password )
@@ -27,18 +29,19 @@ public class CompanyFacade extends  ClientFacade implements Serializable
     }
 
 
-    public  void  addCoupon(Coupon coupon)
-    {
+    public  void  addCoupon(Coupon coupon) throws ParseException {
         Company c1=companiesDAO.getOneCompany(companyID);
-        for (Coupon coupons : c1.getCoupons() )
-        {
-            if (coupons.getTitle().equals(coupon.getTitle()))
-            {
-                return;
-            }
+        CouponsDBDAO couponsDBDAO= CouponsDBDAO.getInstance(context);
+        if(c1.getCoupons()!=null) {
+            for (Coupon coupons : c1.getCoupons()) {
+                if (coupons.getTitle().equals(coupon.getTitle())) {
+                    return;
+                }
 
+            }
         }
         c1.getCoupons().add(coupon);
+        couponsDBDAO.addCoupon(coupon);
         System.out.println("companyFacade addCoupon");
     }
 

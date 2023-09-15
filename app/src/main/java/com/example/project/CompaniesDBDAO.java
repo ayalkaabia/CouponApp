@@ -35,6 +35,7 @@ public class CompaniesDBDAO implements  CompaniesDAO {
         try {
             dbManager= DB_Manager.getInstance(context);
             companies=getAllCompanies();
+            this.context=context;
 
             logSystemOutMessage("CompaniesDBDAO Construction success");
         } catch (Exception e) {
@@ -58,7 +59,7 @@ public class CompaniesDBDAO implements  CompaniesDAO {
         }));
     }
 
-    private static class LogcatOutputStream extends OutputStream {
+    static class LogcatOutputStream extends OutputStream {
         private StringBuilder buffer = new StringBuilder();
 
         @Override
@@ -100,7 +101,7 @@ public class CompaniesDBDAO implements  CompaniesDAO {
     @Override
     public void addCompany(Company company) throws DataExists {
 
-            if (!isCompanyExists(company.getEmail(),company.getPassword())) {
+            if (getOneCompany(company.getId())==null) {
                 companies.add(company);
 
                 ContentValues cv = new ContentValues();
@@ -120,21 +121,19 @@ public class CompaniesDBDAO implements  CompaniesDAO {
 
     @Override
     public void updateCompany(Company company) throws DataNotExists {
-        if (isCompanyExists(company.getEmail(),company.getPassword())) {
+        if (getOneCompany(company.getId())!=null) {
             for(Company company1 : companies)
             {
                 if(company1.getId() == company.getId())
                 {
-              //      company1.setName(company.getName());
                     company1.setEmail(company.getEmail());
-                //    company1.setPassword(company.getPassword());
+                    company1.setPassword(company.getPassword());
                 }
             }
 
             ContentValues cv = new ContentValues();
-           // cv.put("name", company.getName());
             cv.put("email", company.getEmail());
-          //  cv.put("password", company.getPassword());
+            cv.put("password", company.getPassword());
 
 
             SQLiteDatabase db = dbManager.getWritableDatabase();
@@ -142,7 +141,7 @@ public class CompaniesDBDAO implements  CompaniesDAO {
             logSystemOutMessage("companiesDBDAO updateCompany success");
         }
         else
-            throw new DataNotExists("Employee not exists !");
+            throw new DataNotExists("Company not exists !");
 
     }
 
@@ -209,12 +208,13 @@ public class CompaniesDBDAO implements  CompaniesDAO {
 
     @Override
     public Company getOneCompany(int companyId) {
-        for (Company company : companies ) {
-            if(company.getId() == companyId){
-                logSystemOutMessage("companiesDBDAO getOneCompany success");
-                return company;
+        if(companies!=null) {
+            for (Company company : companies) {
+                if (company.getId() == companyId) {
+                    logSystemOutMessage("companiesDBDAO getOneCompany success");
+                    return company;
+                }
             }
-
         }
         return null;
     }

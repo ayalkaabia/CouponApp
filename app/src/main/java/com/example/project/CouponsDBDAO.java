@@ -43,6 +43,7 @@ public class CouponsDBDAO implements CouponsDAO {
             coupons=getAllCoupons();
             // coupons = new ArrayList<Coupon>();
             customersDAO = new CustomersDBDAO(context);
+            this.context=context;
             logSystemOutMessage("CouponsDBDAO Construction success");
         } catch (Exception e) {
             throw e;
@@ -295,10 +296,15 @@ public class CouponsDBDAO implements CouponsDAO {
     @Override
     public void deleteCouponPurchase(int customerID, int couponID) {
 
-        ArrayList<Coupon> customerCoupons;
+        ArrayList<Coupon> customerCoupons = null;
         SQLiteDatabase db = dbManager.getWritableDatabase();
-        db.delete(dbManager.TBL_CUSTOMERS_VS_COUPONS, dbManager.COUPONS_ID + "= '" + customerID + "'", null);
-        customerCoupons = customersDAO.getOneCustomer(customerID).getCoupons();
+        String whereClause = dbManager.COUPONS_ID + " = ? AND " + dbManager.CUSTOMER_ID + " = ?";
+
+        // Define the values for the placeholders in the WHERE clause
+        String[] whereArgs = { String.valueOf(couponID), String.valueOf(customerID) };
+
+        // Perform the delete operation with the updated WHERE clause
+        db.delete(dbManager.TBL_CUSTOMERS_VS_COUPONS, whereClause, whereArgs);
         for (Coupon coupon : customerCoupons)
             if (coupon.getId() == couponID) {
                 customerCoupons.remove(coupon);
@@ -335,7 +341,7 @@ public class CouponsDBDAO implements CouponsDAO {
 
     int getCategoryID(Category category){
         //Preparing the categoryID by its type
-        String[] fields = {dbManager.CATEGORY_ID}; // we only need the category id
+        String[] fields = {dbManager.CATEGORY_ID,dbManager.CATEGORY_NAME}; // we only need the category id
         String categoryType = null;
         if (category == Category.FOOD)
             categoryType = "FOOD";
@@ -345,7 +351,7 @@ public class CouponsDBDAO implements CouponsDAO {
             categoryType = "RESTAURANT";
         if (category == Category.VACATION)
             categoryType = "VACATION";
-        Cursor cr = dbManager.getCursor(dbManager.TBL_CATEGORIES, fields, dbManager.CATEGORY_NAME + "= '" + categoryType + "'");
+       Cursor cr = dbManager.getCursor(dbManager.TBL_CATEGORIES, fields, dbManager.CATEGORY_NAME + "='" + categoryType + "'" );
         int category_id = cr.getInt(0);
         return category_id;
     }

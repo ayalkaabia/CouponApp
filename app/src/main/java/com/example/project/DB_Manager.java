@@ -108,7 +108,12 @@ public class DB_Manager extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(CREATE_TABLE_CUSTOMERS);
         sqLiteDatabase.execSQL(CREATE_TABLE_CATEGORIES);
         sqLiteDatabase.execSQL(CREATE_TABLE_COMPANIES);
-
+        ContentValues cv = new ContentValues();
+        for (Category category : Category.values()) {
+            cv.put(CATEGORY_ID, category.ordinal()); // Use the ordinal() method to get the enum's position
+            cv.put(CATEGORY_NAME, category.name());    // Use the name() method to get the enum's name
+            sqLiteDatabase.insert(TBL_CATEGORIES, null, cv);
+        }
     }
 
     @Override

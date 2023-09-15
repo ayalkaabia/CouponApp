@@ -1,6 +1,10 @@
 package com.example.project;
 import android.content.Context;
+import android.util.Log;
 
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintStream;
 import java.io.Serializable;
 import java.sql.SQLException;
 import java.text.ParseException;
@@ -15,6 +19,7 @@ public class AdminFacade extends ClientFacade implements Serializable {
 
     private AdminFacade(Context context) throws SQLException, ParseException {
         super(context);
+        this.context=context;
     }
 
     public static AdminFacade getInstance(Context context) throws SQLException, ParseException {
@@ -22,6 +27,7 @@ public class AdminFacade extends ClientFacade implements Serializable {
         return instance;
     }
     //...Singleton.............................
+
     @Override
     boolean login(String email, String password) {
         if(adminEmail.equals(email)&&adminPass.equals((password)))
@@ -30,13 +36,12 @@ public class AdminFacade extends ClientFacade implements Serializable {
     }
     public void addCompany(Company company) throws DataExists, SQLException, ParseException {
         for(Company company1 : companiesDAO.getAllCompanies()){
-            if(company1.getName().equals(company.getName()))
+            if(company1.getName()!=null && company1.getName().equals(company.getName()))
                 throw new DataExists("company already exists");
-            if(company1.getEmail().equals(company.getEmail()))
+            if(company1.getEmail()!=null&& company1.getEmail().equals(company.getEmail()))
                 throw new DataExists("company's email already exists");
         }
         companiesDAO.addCompany(company);
-        System.out.println("Added a company");
     }
     public void updateCompany(Company company) throws DataNotExists{
         companiesDAO.updateCompany(company);
@@ -46,14 +51,16 @@ public class AdminFacade extends ClientFacade implements Serializable {
 
         ArrayList<Coupon> coupons = couponsDAO.getAllCoupons();
         if(companiesDAO.getOneCompany(companyID)!=null) {
-            for (Coupon coupon : coupons) {
-                if (coupon.getCompanyID() == companyID) {
-                    couponsDAO.deleteCouponsPurchaseByCouponID(coupon.getId());
-                    couponsDAO.deleteCoupon(coupon.getId());
+            if(coupons!=null) {
+                for (Coupon coupon : coupons) {
+                    if (coupon != null && coupon.getCompanyID() == companyID) {
+                        couponsDAO.deleteCouponsPurchaseByCouponID(coupon.getId());
+                        couponsDAO.deleteCoupon(coupon.getId());
+                    }
                 }
             }
             companiesDAO.deleteCompany(companyID);
-            System.out.println("Deleted a company");
+
         }
         else
             throw new DataNotExists("company doesn't exists");
