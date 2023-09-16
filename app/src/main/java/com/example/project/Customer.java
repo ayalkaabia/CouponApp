@@ -30,12 +30,13 @@ public class Customer implements Serializable {
                 '}';
     }
 
-    public Customer(int id, String fName, String lName, String email, String password) {
+    public Customer(int id, String fName, String lName, String email, String password,ArrayList<Coupon> coupons) {
         this.id = id;
         this.fName = fName;
         this.lName = lName;
         this.email = email;
         this.password = password;
+        this.coupons= coupons;
     }
 
     public int getId() {

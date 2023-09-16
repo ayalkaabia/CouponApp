@@ -10,12 +10,14 @@ import android.util.Log;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.text.ParseException;
 import java.util.ArrayList;
 
 public class CustomersDBDAO implements CustomersDAO {
     ArrayList<Customer> customers;
-    //    Context context;
+    private static  Context context;
     DB_Manager dbManager;
+    CouponsDBDAO couponsDBDAO;
 
 
     //...Singleton.............................
@@ -25,10 +27,17 @@ public class CustomersDBDAO implements CustomersDAO {
     public CustomersDBDAO(Context context) {
         try {
             dbManager = DB_Manager.getInstance(context);
+            couponsDBDAO= CouponsDBDAO.getInstance(context);
             this.customers = getAllCustomers();
+            this.context= context;
+
             logSystemOutMessage("CustomersDBDAO Construction success"); // i can use this function to show all messages i want in the logcat file under the tag : CustomersDBDAO
         } catch (Exception e) {
-            throw e;
+            try {
+                throw e;
+            } catch (ParseException ex) {
+                throw new RuntimeException(ex);
+            }
         }
     }
 
@@ -83,17 +92,21 @@ public class CustomersDBDAO implements CustomersDAO {
 
     @Override
     public Boolean isCustomerExists(String email, String password) {
-        for(Customer customer:customers){
-            if(customer.getEmail().equals(email) && customer.getPassword().equals(password)){
+        if(customers!=null){
+        for(Customer customer:customers) {
+            if (customer.getEmail().equals(email) && customer.getPassword().equals(password)) {
                 return true;
-            }
+              }
+           }
         }
         return false;
     }
     public Customer getCustomer(String email, String password) {
-        for(Customer customer:customers){
-            if(customer.getEmail().equals(email) && customer.getPassword().equals(password)){
-                return customer;
+        if(customers!=null) {
+            for (Customer customer : customers) {
+                if (customer.getEmail().equals(email) && customer.getPassword().equals(password)) {
+                    return customer;
+                }
             }
         }
         return null;
@@ -111,10 +124,13 @@ public class CustomersDBDAO implements CustomersDAO {
             cv.put(dbManager.L_NAME, customer.getlName());
             cv.put(dbManager.EMAIL, customer.getEmail());
             cv.put(dbManager.PASSWORD, customer.getPassword());
-
-            SQLiteDatabase db = dbManager.getWritableDatabase();
-            affectedRows = (int) db.insert(dbManager.TBL_CUSTOMERS, null, cv);
-            logSystemOutMessage("CustomersDBDAO addCustomer success" + affectedRows);
+            try {
+                SQLiteDatabase db = dbManager.getWritableDatabase();
+                affectedRows = (int) db.insert(dbManager.TBL_CUSTOMERS, null, cv);
+                logSystemOutMessage("CustomersDBDAO addCustomer success             " + affectedRows);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
         }
         else {
             try {
@@ -128,6 +144,7 @@ public class CustomersDBDAO implements CustomersDAO {
 
     @Override
     public void updateCustomer(Customer customer) {
+        int updatedRows;
         Customer updatedCustomer = getOneCustomer(customer.getId());
         if (updatedCustomer!=null) {
 
@@ -146,10 +163,13 @@ public class CustomersDBDAO implements CustomersDAO {
             cv.put(dbManager.L_NAME, customer.getlName());
             cv.put(dbManager.EMAIL, customer.getEmail());
             cv.put(dbManager.PASSWORD, customer.getPassword());
-
-            SQLiteDatabase db = dbManager.getWritableDatabase();
-            db.update(dbManager.TBL_CUSTOMERS, cv, dbManager.CUSTOMER_ID + "=" + customer.getId(), null);
-            logSystemOutMessage("CustomersDBDAO updateCustomer success");
+            try {
+                SQLiteDatabase db = dbManager.getWritableDatabase();
+                updatedRows= db.update(dbManager.TBL_CUSTOMERS, cv, dbManager.CUSTOMER_ID + "=" + customer.getId(), null);
+                logSystemOutMessage("CustomersDBDAO updateCustomer success       " +updatedRows);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
         }
         else
             try {
@@ -163,14 +183,19 @@ public class CustomersDBDAO implements CustomersDAO {
     @Override
     public void deleteCustomer(int customerID) {
         Customer toBeDeleted = getOneCustomer(customerID);
+        int deletedRows;
         if(toBeDeleted!=null){
             customers.remove(toBeDeleted);
-            SQLiteDatabase db = dbManager.getWritableDatabase();
-            db.delete(dbManager.TBL_CUSTOMERS, dbManager.CUSTOMER_ID + "=" + customerID, null);
-            logSystemOutMessage("CustomersDBDAO deleteCustomer success");
+            try {
+                SQLiteDatabase db = dbManager.getWritableDatabase();
+                deletedRows = db.delete(dbManager.TBL_CUSTOMERS, dbManager.CUSTOMER_ID + "=" + customerID, null);
+                logSystemOutMessage("CustomersDBDAO deleteCustomer success    " + deletedRows);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
         } else {
             try {
-                throw new DataNotExists("Employee does not exist!");
+                throw new DataNotExists("Customer does not exist!");
             } catch (DataNotExists e) {
                 throw new RuntimeException(e);
             }
@@ -178,22 +203,24 @@ public class CustomersDBDAO implements CustomersDAO {
     }
 
     @Override
-    public ArrayList<Customer> getAllCustomers() {
-         customers = new ArrayList<>();
+    public ArrayList<Customer> getAllCustomers() throws ParseException {
+        customers = new ArrayList<>();
+        ArrayList<Coupon> customerCoupons = new ArrayList<>();
         String[] fields = {dbManager.CUSTOMER_ID, dbManager.F_NAME,dbManager.L_NAME,dbManager.EMAIL,dbManager.PASSWORD};
         String  fName,lName, email, password;
         int id;
-        Cursor cr = null;
+        //Cursor cr = null;
         try {
-             cr = dbManager.getCursor(dbManager.TBL_CUSTOMERS, fields, null);
-            if (cr.moveToFirst())
+            Cursor cr = dbManager.getCursor(dbManager.TBL_CUSTOMERS, fields, null);
+            if (cr!=null && cr.moveToFirst())
                 do {
                     id = cr.getInt(0);
                     fName = cr.getString(1);
                     lName=cr.getString(2);
                     email = cr.getString(3);
                     password = cr.getString(4);
-                    customers.add(new Customer(id,fName,lName,email,password));
+                    customerCoupons= couponsDBDAO.getCouponsPurchaseByCustomerID(id);
+                    customers.add(new Customer(id,fName,lName,email,password,customerCoupons));
                 } while (cr.moveToNext());
             logSystemOutMessage("CustomersDBDAO getAllCustomers success");
             return customers;
@@ -204,13 +231,14 @@ public class CustomersDBDAO implements CustomersDAO {
 
     @Override
     public Customer getOneCustomer(int customerID) {
-        for (Customer customer : customers ) {
-            if(customer.getId() == customerID) {
-                logSystemOutMessage("CustomersDBDAO getOneCustomer success");
-                return customer;
+        if(customers!=null) {
+            for (Customer customer : customers) {
+                if (customer.getId() == customerID) {
+                    logSystemOutMessage("CustomersDBDAO getOneCustomer success");
+                    return customer;
+                }
             }
         }
         return null;
     }
-
 }

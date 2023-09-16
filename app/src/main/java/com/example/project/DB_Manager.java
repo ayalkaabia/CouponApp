@@ -51,7 +51,7 @@ public class DB_Manager extends SQLiteOpenHelper {
                     PASSWORD + " text)";
 
     public final static String TBL_COUPONS = "Coupons";
-    public final static String COUPONS_ID = "id";
+    public final static String COUPON_ID = "id";
     public final static String KEY_COMPANY_ID_FK = "company_id";
     public final static String KEY_CATEGORY_ID_FK = "category_id";
     public final static String COUPONS_TITLE = "title";
@@ -62,7 +62,7 @@ public class DB_Manager extends SQLiteOpenHelper {
     public final static String COUPONS_PRICE = "price";
     public final static String COUPONS_IMAGE = "image";
     public final static String CREATE_TABLE_COUPONS = "CREATE TABLE IF NOT EXISTS " + TBL_COUPONS + "(" +
-            COUPONS_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+            COUPON_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
             KEY_COMPANY_ID_FK + " INTEGER," +
             KEY_CATEGORY_ID_FK + " INTEGER," +
             COUPONS_TITLE + " TEXT," +
@@ -77,9 +77,6 @@ public class DB_Manager extends SQLiteOpenHelper {
 
 
     public final static String TBL_CUSTOMERS_VS_COUPONS = "Customers_vs_Coupons";
-    public final static String COUPON_ID = "CouponID";
-
-
     public final static String CREATE_TABLE_CUSTOMERS_VS_COUPONS =
             "CREATE TABLE IF NOT EXISTS " + TBL_CUSTOMERS_VS_COUPONS +
                     " (" + CUSTOMER_ID + " INTEGER, " +
@@ -108,29 +105,30 @@ public class DB_Manager extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(CREATE_TABLE_CUSTOMERS);
         sqLiteDatabase.execSQL(CREATE_TABLE_CATEGORIES);
         sqLiteDatabase.execSQL(CREATE_TABLE_COMPANIES);
+       // intilizationCategoryTable();
 
-        ContentValues cv = new ContentValues();
-        try {
-            cv.put(CATEGORY_NAME, "FOOD");
-            sqLiteDatabase.insert(TBL_CATEGORIES, null, cv);
-
-            // Insert the second category
-            cv.clear(); // Clear the ContentValues to reuse it
-            cv.put(CATEGORY_NAME, "ELECTRICITY");
-            sqLiteDatabase.insert(TBL_CATEGORIES, null, cv);
-
-            // Insert the third category
-            cv.clear(); // Clear the ContentValues to reuse it
-            cv.put(CATEGORY_NAME, "RESTAURANT");
-            sqLiteDatabase.insert(TBL_CATEGORIES, null, cv);
-
-            // Insert the fourth category
-            cv.clear(); // Clear the ContentValues to reuse it
-            cv.put(CATEGORY_NAME, "VACATION");
-            sqLiteDatabase.insert(TBL_CATEGORIES, null, cv);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+ //       ContentValues cv = new ContentValues();
+//        try {
+//            cv.put(CATEGORY_NAME, "FOOD");
+//            sqLiteDatabase.insert(TBL_CATEGORIES, null, cv);
+//
+//            // Insert the second category
+//            cv.clear(); // Clear the ContentValues to reuse it
+//            cv.put(CATEGORY_NAME, "ELECTRICITY");
+//            sqLiteDatabase.insert(TBL_CATEGORIES, null, cv);
+//
+//            // Insert the third category
+//            cv.clear(); // Clear the ContentValues to reuse it
+//            cv.put(CATEGORY_NAME, "RESTAURANT");
+//            sqLiteDatabase.insert(TBL_CATEGORIES, null, cv);
+//
+//            // Insert the fourth category
+//            cv.clear(); // Clear the ContentValues to reuse it
+//            cv.put(CATEGORY_NAME, "VACATION");
+//            sqLiteDatabase.insert(TBL_CATEGORIES, null, cv);
+//        } catch (Exception e) {
+//            throw new RuntimeException(e);
+//        }
 
     }
 
@@ -164,12 +162,19 @@ public class DB_Manager extends SQLiteOpenHelper {
         } catch (Exception e) {
             throw e;
         }
-        finally {
-            cr.close();
-        }
+
 
     }
-
+    public  void intilizationCategoryTable()
+    {
+        SQLiteDatabase db=this.getReadableDatabase();
+        for (Category category : Category.values()) {
+            ContentValues values=new ContentValues();
+            values.put(CATEGORY_NAME,category.name());
+            db.insert(TBL_CATEGORIES,null,values);
+        }
+        db.close();
+   }
 
 }
 

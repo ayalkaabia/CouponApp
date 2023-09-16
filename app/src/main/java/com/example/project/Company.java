@@ -16,7 +16,7 @@ public class Company implements Serializable
         this.name = name;
         this.email = email;
         this.password = password;
-        this.coupons = new ArrayList<>();
+        this.coupons = coupons;
     }
 
     public void setId(int id) {

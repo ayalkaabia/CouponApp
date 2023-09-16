@@ -23,7 +23,7 @@ public class CouponsDBDAO implements CouponsDAO {
     private static CouponsDBDAO instance = null;
     DB_Manager dbManager;
     private static Context context;
-    private CustomersDAO customersDAO;
+   // private CustomersDAO customersDAO;
 
 
     //...Singleton.............................
@@ -40,9 +40,10 @@ public class CouponsDBDAO implements CouponsDAO {
     public CouponsDBDAO(Context context) throws ParseException {
         try {
             dbManager = DB_Manager.getInstance(context);
+          //  customersDAO = CustomersDBDAO.getInstance(context);
             coupons=getAllCoupons();
             // coupons = new ArrayList<Coupon>();
-            customersDAO = new CustomersDBDAO(context);
+
             this.context=context;
             logSystemOutMessage("CouponsDBDAO Construction success");
         } catch (Exception e) {
@@ -92,11 +93,12 @@ public class CouponsDBDAO implements CouponsDAO {
     //...Singleton.............................
     @Override
     public void addCoupon(Coupon coupon) {
+        int insertRow;
         Coupon newCoupon = getOneCoupon(coupon.getId());
         String[] fields = {dbManager.CATEGORY_ID, dbManager.CATEGORY_NAME};
         if (newCoupon == null) {
             ContentValues cv = new ContentValues();
-            cv.put(dbManager.COUPONS_ID, coupon.getId());
+            cv.put(dbManager.COUPON_ID, coupon.getId());
             cv.put(dbManager.KEY_COMPANY_ID_FK, coupon.getCompanyID());
 
             int category_id=getCategoryID(coupon.getCategory());//getting category id by the category type using function we built
@@ -119,14 +121,15 @@ public class CouponsDBDAO implements CouponsDAO {
             cv.put(dbManager.COUPONS_IMAGE, coupon.getImage());
             try {
 
-                dbManager.getWritableDatabase().insert(dbManager.TBL_COUPONS, null, cv);
+                insertRow= (int) dbManager.getWritableDatabase().insert(dbManager.TBL_COUPONS, null, cv);
+                logSystemOutMessage("CouponsDBDAO addCoupon success  " + insertRow);
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
-            logSystemOutMessage("CouponsDBDAO addCoupon success");
+
         } else
             try {
-                throw new DataExists("This employee already exists !");
+                throw new DataExists("This coupon already exists !");
             } catch (DataExists e) {
                 throw new RuntimeException(e);
             }
@@ -134,6 +137,7 @@ public class CouponsDBDAO implements CouponsDAO {
 
     @Override
     public void updateCoupon(Coupon coupon) {
+        int updatedRow;
         Coupon updatedCoupon = getOneCoupon(coupon.getId());
         if (updatedCoupon != null) {
 
@@ -177,14 +181,14 @@ public class CouponsDBDAO implements CouponsDAO {
 
             SQLiteDatabase db = dbManager.getWritableDatabase();
             try {
-                db.update(dbManager.TBL_COUPONS, cv, " WHERE " + dbManager.COUPONS_ID + "= '" + coupon.getId() + "'", null);
+                updatedRow= db.update(dbManager.TBL_COUPONS, cv,  " WHERE " + dbManager.COUPON_ID + "= '" + coupon.getId() + "'", null);
+                logSystemOutMessage("CouponsDBDAO updateCoupon success     "+ updatedRow);
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
-            logSystemOutMessage("CouponsDBDAO updateCoupon success");
         } else
             try {
-                throw new DataNotExists("Employee not exists !");
+                throw new DataNotExists("coupon not exists !");
             } catch (DataNotExists e) {
                 throw new RuntimeException(e);
             }
@@ -193,19 +197,21 @@ public class CouponsDBDAO implements CouponsDAO {
 
     @Override
     public void deleteCoupon(int CouponID) {
+        int deletedRow;
         Coupon toBeDeleted = getOneCoupon(CouponID);
         if (toBeDeleted != null) {
             coupons.remove(toBeDeleted);
             SQLiteDatabase db = dbManager.getWritableDatabase();
             try {
-                db.delete(dbManager.TBL_COUPONS, " WHERE " + dbManager.COUPONS_ID + "= '" + CouponID + "'", null);
+                deletedRow= db.delete(dbManager.TBL_COUPONS,   dbManager.COUPON_ID + "= '" + CouponID + "'", null);
+                logSystemOutMessage("CouponsDBDAO deleteCoupon success     " + deletedRow);
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
-            logSystemOutMessage("CouponsDBDAO deleteCoupon success");
+
         } else {
             try {
-                throw new DataNotExists("Employee does not exist!");
+                throw new DataNotExists("Coupon does not exist!");
             } catch (DataNotExists e) {
                 throw new RuntimeException(e);
             }
@@ -217,7 +223,7 @@ public class CouponsDBDAO implements CouponsDAO {
     @Override
     public ArrayList<Coupon> getAllCoupons() throws ParseException {
         coupons = new ArrayList<>();
-        String[] fields = {dbManager.COUPONS_ID, dbManager.KEY_COMPANY_ID_FK, dbManager.KEY_CATEGORY_ID_FK, dbManager.COUPONS_TITLE,
+        String[] fields = {dbManager.COUPON_ID, dbManager.KEY_COMPANY_ID_FK, dbManager.KEY_CATEGORY_ID_FK, dbManager.COUPONS_TITLE,
                 dbManager.COUPONS_DESCRIPTION, dbManager.COUPONS_START_DATE, dbManager.COUPONS_END_DATE, dbManager.COUPONS_AMOUNT, dbManager.COUPONS_PRICE, dbManager.COUPONS_IMAGE};
         String title, description, couponsImage;
         int amount;
@@ -231,13 +237,14 @@ public class CouponsDBDAO implements CouponsDAO {
         Cursor cr=null,cr2=null;
         try {
             cr = dbManager.getCursor(dbManager.TBL_COUPONS, fields, null);
-            if (cr.moveToFirst())
+            if (cr!=null && cr.moveToPosition(0))
                 do {
                     couponsId = cr.getInt(0);
                     companyId = cr.getInt(1);
                     categoryId = cr.getInt(2);
                     //to find categoryType from categoryID
-                    cr2 = dbManager.getCursor(dbManager.TBL_CATEGORIES, fields1, " WHERE " + dbManager.CATEGORY_ID + "= '" + categoryId + "'");
+                    cr2 = dbManager.getCursor(dbManager.TBL_CATEGORIES, fields1,  " WHERE " + dbManager.CATEGORY_ID + "= '" + categoryId + "'");
+                    cr2.moveToPosition(0);
                     category = cr2.getString(1);  // we should be wary that cr2 is a new cursor ..
                     if (category.equals("FOOD"))
                         categoryType = Category.FOOD;
@@ -261,6 +268,7 @@ public class CouponsDBDAO implements CouponsDAO {
             logSystemOutMessage("CouponsDBDAO getAllCoupons success");
             return coupons;
         } catch (Exception e) {
+            e.printStackTrace();
             throw e;
         }
 
@@ -291,45 +299,50 @@ public class CouponsDBDAO implements CouponsDAO {
         SQLiteDatabase db = dbManager.getWritableDatabase();
         try {
             db.insert(dbManager.TBL_CUSTOMERS_VS_COUPONS, null, cv);
+            logSystemOutMessage("CouponsDBDAO addCouponPurchase success");
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        customerCoupons = customersDAO.getOneCustomer(customerID).getCoupons();
-        for (Coupon coupon : coupons)
-            if (coupon.getId() == couponID) { //ADDING THE COUPON TO THE CUSTOMER COUPONS???
-                customerCoupons.add(coupon);
-                coupon.setAmount(coupon.getAmount() - 1);
-                logSystemOutMessage("CouponsDBDAO addCouponPurchase success");
-            }
+//      //  customerCoupons = customersDAO.getOneCustomer(customerID).getCoupons();
+//        for (Coupon coupon : coupons)
+//            if (coupon.getId() == couponID) { //ADDING THE COUPON TO THE CUSTOMER COUPONS???
+//                customerCoupons.add(coupon);
+//                coupon.setAmount(coupon.getAmount() - 1);
+//
+//            }
 
     }
 
     @Override
     public void deleteCouponPurchase(int customerID, int couponID) {
 
+        int deletedRow;
         ArrayList<Coupon> customerCoupons = null;
         SQLiteDatabase db = dbManager.getWritableDatabase();
-        String whereClause = dbManager.COUPONS_ID + " = ? AND " + dbManager.CUSTOMER_ID + " = ?";
+        String whereClause = dbManager.COUPON_ID + " = ? AND " + dbManager.CUSTOMER_ID + " = ?";
 
         // Define the values for the placeholders in the WHERE clause
         String[] whereArgs = { String.valueOf(couponID), String.valueOf(customerID) };
 
         // Perform the delete operation with the updated WHERE clause
-        db.delete(dbManager.TBL_CUSTOMERS_VS_COUPONS, whereClause, whereArgs);
-        for (Coupon coupon : customerCoupons)
-            if (coupon.getId() == couponID) {
-                customerCoupons.remove(coupon);
-                coupon.setAmount(coupon.getAmount() + 1);
-                logSystemOutMessage("CouponsDBDAO deleteCouponPurchase success");
-            }
+        try {
+            deletedRow= db.delete(dbManager.TBL_CUSTOMERS_VS_COUPONS, whereClause, whereArgs);
+            logSystemOutMessage("CouponsDBDAO deleteCouponPurchase success      " + deletedRow);
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+
+
     }
 
     public void deleteCouponsPurchaseByCouponID(int couponID) {
         int customerId;
-        String[] fields = {dbManager.CUSTOMER_ID, dbManager.COUPONS_ID};
+        String[] fields = {dbManager.CUSTOMER_ID, dbManager.COUPON_ID};
         Cursor cr =null;
         try {
-            cr = dbManager.getCursor(dbManager.TBL_CUSTOMERS_VS_COUPONS, fields, " WHERE " + dbManager.COUPONS_ID + "= '" + couponID + "'");
+            cr = dbManager.getCursor(dbManager.TBL_CUSTOMERS_VS_COUPONS, fields, " WHERE " + dbManager.COUPON_ID + "= '" + couponID + "'");
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -345,10 +358,10 @@ public class CouponsDBDAO implements CouponsDAO {
 
     public void deleteCouponsPurchaseByCustomerID(int customerId) {
         int couponID;
-        String[] fields = {dbManager.CUSTOMER_ID, dbManager.COUPONS_ID};
+        String[] fields = {dbManager.CUSTOMER_ID, dbManager.COUPON_ID};
         Cursor cr=null;
         try {
-            cr = dbManager.getCursor(dbManager.TBL_CUSTOMERS_VS_COUPONS, fields, " WHERE " + dbManager.CUSTOMER_ID + "= '" + customerId + "'");
+            cr = dbManager.getCursor(dbManager.TBL_CUSTOMERS_VS_COUPONS, fields,   dbManager.CUSTOMER_ID + "= '" + customerId + "'");
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -360,6 +373,28 @@ public class CouponsDBDAO implements CouponsDAO {
             } while (cr.moveToNext());
         logSystemOutMessage("CouponsDBDAO deleteCouponPurchase by customerID success");
 
+    }
+    public ArrayList<Coupon> getCouponsPurchaseByCustomerID(int customerId) {
+        int couponID;
+        ArrayList<Coupon> customerCoupons= new ArrayList<>();
+        Coupon coupon;
+        String[] fields = {dbManager.CUSTOMER_ID, dbManager.COUPON_ID};
+        Cursor cr=null;
+        try {
+            cr = dbManager.getCursor(dbManager.TBL_CUSTOMERS_VS_COUPONS, fields,   " WHERE " + dbManager.CUSTOMER_ID + "= '" + customerId + "'");
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        if (cr.moveToFirst())
+            do {
+                couponID = cr.getInt(1);
+                coupon=getOneCoupon(couponID);
+                customerCoupons.add(coupon);
+
+            } while (cr.moveToNext());
+
+
+        return customerCoupons;
     }
 
     int getCategoryID(Category category){
@@ -376,17 +411,14 @@ public class CouponsDBDAO implements CouponsDAO {
             categoryType = "VACATION";
         Cursor cr=null;
         try {
-            cr = dbManager.getCursor(dbManager.TBL_CATEGORIES, fields, " WHERE " + dbManager.CATEGORY_NAME + "='" + categoryType + "'");
+            cr = dbManager.getCursor(dbManager.TBL_CATEGORIES, fields,  " WHERE " + dbManager.CATEGORY_NAME + "='" + categoryType + "'");
            logSystemOutMessage(String.valueOf(cr.getCount())+ "hhhhhhhhhhhhhhhhhhhhhhhhhhhh");
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
         int category_id=-1;
         cr.moveToFirst();
-        category_id = (int) cr.getInt(0);
-
-
-
+        category_id = cr.getInt(0);
         return category_id;
     }
 

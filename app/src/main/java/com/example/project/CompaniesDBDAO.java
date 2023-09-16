@@ -36,7 +36,6 @@ public class CompaniesDBDAO implements  CompaniesDAO {
             dbManager= DB_Manager.getInstance(context);
             companies=getAllCompanies();
             this.context=context;
-
             logSystemOutMessage("CompaniesDBDAO Construction success");
         } catch (Exception e) {
             throw e;
@@ -103,24 +102,30 @@ public class CompaniesDBDAO implements  CompaniesDAO {
 
             if (getOneCompany(company.getId())==null) {
                 companies.add(company);
+                int newRow;
 
                 ContentValues cv = new ContentValues();
-                cv.put("name", company.getName());
-                cv.put("email", company.getEmail());
-                cv.put("password", company.getPassword());
+                cv.put(dbManager.NAME, company.getName());
+                cv.put(dbManager.EMAIL, company.getEmail());
+                cv.put(dbManager.PASSWORD, company.getPassword());
 
-
-                SQLiteDatabase db = dbManager.getWritableDatabase();
-                db.insert("companies", null, cv);
-                logSystemOutMessage("companiesDBDAO addCompany success");
+            try {
+                  SQLiteDatabase db = dbManager.getWritableDatabase();
+                  newRow= (int) db.insert(dbManager.TBL_COMPANIES, null, cv);
+                  logSystemOutMessage("companiesDBDAO addCompany success    "+ newRow);
+                } catch (Exception e) {
+                logSystemOutMessage("companiesDBDAO addCompany failure");
+                throw new RuntimeException(e);
+            }
             }
             else
-                throw new DataExists("This employee already exists !");
+                throw new DataExists("This Company already exists !");
     }
 
 
     @Override
     public void updateCompany(Company company) throws DataNotExists {
+        int rowsUpdated;
         if (getOneCompany(company.getId())!=null) {
             for(Company company1 : companies)
             {
@@ -132,13 +137,17 @@ public class CompaniesDBDAO implements  CompaniesDAO {
             }
 
             ContentValues cv = new ContentValues();
-            cv.put("email", company.getEmail());
-            cv.put("password", company.getPassword());
+            cv.put(dbManager.EMAIL, company.getEmail());
+            cv.put(dbManager.PASSWORD, company.getPassword());
 
+            try {
+                    SQLiteDatabase db = dbManager.getWritableDatabase();
+                    rowsUpdated=db.update(dbManager.TBL_COMPANIES, cv, dbManager.COMPANY_ID + "='" + company.getId() + "'", null);
+                    logSystemOutMessage("companiesDBDAO updateCompany success      " + rowsUpdated);
+                } catch (Exception e) {
+                      throw new RuntimeException(e);
+                }
 
-            SQLiteDatabase db = dbManager.getWritableDatabase();
-            db.update("companies", cv,  "company_id" + "='" + company.getId() + "'", null);
-            logSystemOutMessage("companiesDBDAO updateCompany success");
         }
         else
             throw new DataNotExists("Company not exists !");
@@ -148,11 +157,17 @@ public class CompaniesDBDAO implements  CompaniesDAO {
     @Override
     public void deleteCompany(int companyId) throws DataNotExists {
         Company toBeDeleted = getOneCompany(companyId);
+        int deletedRows;
         if (toBeDeleted != null) {
             companies.remove(toBeDeleted);
-            SQLiteDatabase db = dbManager.getWritableDatabase();
-            db.delete("companies", "company_id" + "='" + companyId + "'", null);
-            logSystemOutMessage("companiesDBDAO deleteCompany success");
+            try {
+                SQLiteDatabase db = dbManager.getWritableDatabase();
+                deletedRows=db.delete(dbManager.TBL_COMPANIES,  dbManager.COMPANY_ID + "='" + companyId + "'", null);
+                logSystemOutMessage("companiesDBDAO deleteCompany success      " + deletedRows);
+            } catch (Exception e) {
+                logSystemOutMessage("companiesDBDAO deleteCompany FAILURE");
+                throw new RuntimeException(e);
+            }
         }
         else
             throw new DataNotExists("Employee not exists !");
@@ -167,11 +182,12 @@ public class CompaniesDBDAO implements  CompaniesDAO {
         String name, email, password;
         int id;
         Cursor cr = null;
-        ArrayList<Coupon> allCoupons=null,companyCoupons=null;
+        ArrayList<Coupon> allCoupons,companyCoupons;
+        companyCoupons= new ArrayList<>();
         CouponsDBDAO couponsDBDAO=CouponsDBDAO.getInstance(context);
         try {
              cr = dbManager.getCursor(dbManager.TBL_COMPANIES, fields, null);
-            if (cr.moveToFirst()) {
+            if (cr!=null && cr.moveToFirst()) {
                 do {
                     id = cr.getInt(0);
                     name = cr.getString(1);
@@ -197,13 +213,13 @@ public class CompaniesDBDAO implements  CompaniesDAO {
             return new ArrayList<>();
 
         }
-        finally {
-            // Close the cursor to release resources
-            if (cr != null && !cr.isClosed()) {
-                cr.close();
-            }
-            
-        }
+//        finally {
+//            // Close the cursor to release resources
+//            if (cr != null && !cr.isClosed()) {
+//                cr.close();
+//            }
+//
+//        }
     }
 
     @Override

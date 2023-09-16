@@ -19,7 +19,7 @@ public class AdminFacade extends ClientFacade implements Serializable {
 
     private AdminFacade(Context context) throws SQLException, ParseException {
         super(context);
-        this.context=context;
+      //  this.context=context;
     }
 
     public static AdminFacade getInstance(Context context) throws SQLException, ParseException {
@@ -45,7 +45,6 @@ public class AdminFacade extends ClientFacade implements Serializable {
     }
     public void updateCompany(Company company) throws DataNotExists{
         companiesDAO.updateCompany(company);
-        System.out.println("updated a company");
     }
     public void deleteCompany(int companyID) throws ParseException, DataNotExists {
 
@@ -54,6 +53,7 @@ public class AdminFacade extends ClientFacade implements Serializable {
             if(coupons!=null) {
                 for (Coupon coupon : coupons) {
                     if (coupon != null && coupon.getCompanyID() == companyID) {
+                        deleteCouponFromCustomersCoupons(coupon.getId());
                         couponsDAO.deleteCouponsPurchaseByCouponID(coupon.getId());
                         couponsDAO.deleteCoupon(coupon.getId());
                     }
@@ -64,6 +64,15 @@ public class AdminFacade extends ClientFacade implements Serializable {
         }
         else
             throw new DataNotExists("company doesn't exists");
+    }
+    public void deleteCouponFromCustomersCoupons(int couponId) throws ParseException {
+        ArrayList<Customer> customers= customersDAO.getAllCustomers();
+        for(Customer customer : customers) {
+            for (Coupon coupon : customer.getCoupons()){
+                if(coupon.getId()==couponId)
+                    customer.getCoupons().remove(coupon);
+            }
+        }
     }
     public  ArrayList<Company> getAllCompanies() throws DataNotExists, ParseException {
         if(companiesDAO.getAllCompanies()!=null) {
@@ -85,7 +94,7 @@ public class AdminFacade extends ClientFacade implements Serializable {
     }
 
 
-    public void addCustomer(Customer customer) throws DataExists {
+    public void addCustomer(Customer customer) throws DataExists, ParseException {
         for (Customer customer1 : customersDAO.getAllCustomers()) {
             if (customer1.getEmail().equals(customer.getEmail()))
                 throw new DataExists("customer Email already exists");
@@ -108,7 +117,7 @@ public class AdminFacade extends ClientFacade implements Serializable {
         else
             throw new DataNotExists("Customer doesn't exists");
     }
-    public ArrayList<Customer> getAllCustomers() throws DataNotExists {
+    public ArrayList<Customer> getAllCustomers() throws DataNotExists, ParseException {
         if(customersDAO.getAllCustomers()!=null) {
             System.out.println("got all customers");
             return customersDAO.getAllCustomers();

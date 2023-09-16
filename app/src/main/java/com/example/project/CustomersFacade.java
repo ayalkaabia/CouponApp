@@ -38,56 +38,51 @@ public class CustomersFacade extends ClientFacade implements Serializable {
 //            throw new Exception("expiration date has already arrived");
 //        }
         //purchase the coupon and link the coupon id with the customer id + reduce quantity by 1
+
         couponsDAO.addCouponPurchase(customerID, coupon.getId());
-        System.out.println("customer purchased a coupon");
-
-
+        coupon.setAmount(coupon.getAmount() - 1);
+        userCoupons = customersDAO.getOneCustomer(customerID).getCoupons();
+        userCoupons.add(coupon);
+        couponsDAO.updateCoupon(coupon);
+        Company company = companiesDAO.getOneCompany(coupon.getCompanyID());
+        for(Coupon coupon1 : company.getCoupons())
+            if(coupon1.getId()==coupon.getId())
+                coupon1.setAmount(coupon1.getAmount() - 1);
 
     }
     ArrayList<Coupon> getCustomerCoupons() throws ParseException {
 
-        ArrayList<Customer> customers1=customersDAO.getAllCustomers();
-        for(Customer customer:customers1){
-            if(customer.getId()==customerID){
-                System.out.println("got customer coupons using getCustomerCoupons");
-                return customer.getCoupons();
-            }
-        }
-        return null;
+        return customersDAO.getOneCustomer(customerID).getCoupons();
     }
     ArrayList<Coupon> getCustomerCoupons(Category category) throws ParseException { //getting all the customer coupons that are under this Category
 
-        ArrayList<Coupon> returnedCoupons=null;
+        ArrayList<Coupon> returnedCoupons=new ArrayList<>();
         ArrayList<Coupon> coupons1=getCustomerCoupons();//getting customer coupons
         for(Coupon coupon:coupons1){
             if(coupon.getCategory()==category){
                 returnedCoupons.add(coupon);
             }
         }
-        System.out.println("got customer coupons using getCustomerCoupons by category");
         return returnedCoupons;
     }
     ArrayList<Coupon> getCustomerCoupons(double maxPrice) throws ParseException {
-        ArrayList<Coupon> returnedCoupons=null;
+        ArrayList<Coupon> returnedCoupons=new ArrayList<>();
         ArrayList<Coupon> coupons1=getCustomerCoupons();//getting customer coupons
         for(Coupon coupon:coupons1){
             if(coupon.getPrice()<=maxPrice){
                 returnedCoupons.add(coupon);
             }
         }
-        System.out.println("got customer coupons using getCustomerCoupons by maxprice");
         return returnedCoupons;
 
     }
-    Customer getCustomerDetails(){
+    Customer getCustomerDetails() throws ParseException {
         ArrayList<Customer> customers1=customersDAO.getAllCustomers();
         for(Customer customer:customers1){
             if(customer.getId()==customerID){
-                System.out.println("got customer details");
                 return customer;
             }
         }
-
         return null;
     }
 

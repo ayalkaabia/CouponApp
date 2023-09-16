@@ -70,26 +70,55 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         db = DB_Manager.getInstance(this);
-        Date date = new Date(2001,8,21);
-        Date date2 = new Date(2050,8,21);
+        db.intilizationCategoryTable(); // how should we initialize the category table
+
         //CREATE INSTANCES OF CUSTOMERDBDAO AND COUPONDBDAO AND COMPANYDBDAO AND TRY FUNCTIONS
         //AND TRY ADMIN FACADE FUNCTIONS WWITH PRINTS IN THE END
-         Coupon coupon = new Coupon(100,50,Category.FOOD,"hhh","hhh",date,date2,5,50.0,"hhh");
-        try {
-           // Company company = new Company(13,"mohamad","hhh","hhh",null);
-            AdminFacade adminFacade=AdminFacade.getInstance(this);
-          //  adminFacade.addCompany(company);
-            CouponsDBDAO couponsDBDAO=CouponsDBDAO.getInstance(this);
-            CompanyFacade companyFacade = new CompanyFacade(this);
-            companyFacade.addCoupon(coupon);
-        } catch (ParseException e) {
-            throw new RuntimeException(e);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+       //  Coupon coupon = new Coupon(100,50,Category.FOOD,"hhh","hhh",date,date2,5,50.0,"hhh");
+//        try {
+//           // Company company = new Company(13,"mohamad","hhh","hhh",null);
+//            ArrayList<Coupon> coupons = new ArrayList<>();
+//            Customer customer= new Customer(100,"merry","shalabi","hh","hh",coupons);
+//            CustomersDBDAO customersDBDAO= CustomersDBDAO.getInstance(this);
+//            customersDBDAO.addCustomer(customer);
+//            AdminFacade adminFacade=AdminFacade.getInstance(this);
+//          //  adminFacade.addCompany(company);
+//            CouponsDBDAO couponsDBDAO=CouponsDBDAO.getInstance(this);
+//            CompanyFacade companyFacade = new CompanyFacade(this);
+//            companyFacade.addCoupon(coupon);
+//        } catch (ParseException e) {
+//            throw new RuntimeException(e);
+//        } catch (SQLException e) {
+//            throw new RuntimeException(e);
+//        }
 //        catch (DataExists e) {
 //            throw new RuntimeException(e);
 //        }
+
+//            CompaniesDBDAO companiesDBDAO=CompaniesDBDAO.getInstance(this);
+//            Company company = new Company(1,"lllll","llllllll","llllllll",null);
+////            companiesDBDAO.updateCompany(company);
+//            CustomersDBDAO customersDBDAO = CustomersDBDAO.getInstance(this);
+//            Customer customer=new Customer(3,"kkkkkkk","kkkkkk","kkkkkkkkkk","kkkkkkkkkkk",null);
+//            customersDBDAO.addCustomer(customer);
+//            customersDBDAO.deleteCustomer(customer.getId());
+//        } catch (Exception e) {
+//            throw new RuntimeException(e);
+//        }
+         //   Date date = new Date(2001,8,21);
+           // Date date2 = new Date(2050,8,21);
+//        try {
+////            Coupon coupon= new Coupon(1,12,Category.FOOD,"hhhhhhh","hhhhh",date,date2,5,50.5,"hhhh");
+////            CouponsDBDAO couponsDBDAO = CouponsDBDAO.getInstance(this);
+////          //  couponsDBDAO.addCoupon(coupon);
+////           // couponsDBDAO.deleteCoupon(coupon.getId());
+////           // couponsDBDAO.addCouponPurchase(10,10);
+////            couponsDBDAO.deleteCouponPurchase(10,10);
+////            AdminFacade adminFacade=AdminFacade.getInstance(this);
+//        } catch (ParseException e) {
+//            throw new RuntimeException(e);
+//        }
+
 
 
         rgUserType = findViewById(R.id.main_rgUserType);
