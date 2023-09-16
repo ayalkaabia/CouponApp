@@ -20,10 +20,12 @@ public class LoginManager {
     }
 
     public Object login(String email, String password, ClientType clientType) throws SQLException {
-
+        Context ctx=context;
         switch (clientType) {
+
             case ADMINISTRATOR:
-                AdminFacade adminFacade = AdminFacade.getInstance(context);
+
+                AdminFacade adminFacade = AdminFacade.getInstance(ctx);
                 if(adminFacade.login(email,password)==true)
                     return adminFacade;
                 return null;

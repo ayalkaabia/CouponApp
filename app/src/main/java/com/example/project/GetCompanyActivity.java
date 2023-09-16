@@ -13,7 +13,7 @@ import java.sql.SQLException;
 public class GetCompanyActivity extends AppCompatActivity {
 
     private EditText companyIdEditText;
-    private Button displayDetailsButton;
+    private Button displayDetailsButton,Cancel;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -22,6 +22,13 @@ public class GetCompanyActivity extends AppCompatActivity {
 
         companyIdEditText = findViewById(R.id.editTextCompanyId);
         displayDetailsButton = findViewById(R.id.buttonDisplayDetails);
+        Cancel=findViewById(R.id.DisplaycompanyCancel);
+        Cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
 
         displayDetailsButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -56,9 +63,5 @@ public class GetCompanyActivity extends AppCompatActivity {
         transaction.commit();
     }
 
-    @Override
-    public void onBackPressed() {
-        // Navigate back to the previous activity (AdminActivity)
-        finish();
-    }
+
 }

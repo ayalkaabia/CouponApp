@@ -110,25 +110,29 @@ public class CompaniesDBDAO implements  CompaniesDAO {
 
     @Override
     public ArrayList<Company> getAllCompanies() {
-
-        ArrayList<Company> companies1 = new ArrayList<>();
+        companies = new ArrayList<>();
 
         String[] fields = {dbManager.COMPANY_ID, dbManager.NAME, dbManager.EMAIL, dbManager.PASSWORD};
-        String  name, email, password;
+        String name, email, password;
         int id;
         try {
             Cursor cr = dbManager.getCursor(dbManager.TBL_COMPANIES, fields, null);
-            if (cr.moveToFirst())
+            if (cr.moveToFirst()) {
                 do {
                     id = cr.getInt(0);
                     name = cr.getString(1);
                     email = cr.getString(2);
                     password = cr.getString(3);
+                    // Adjust the last argument as needed based on the Company class constructor
                     companies.add(new Company(id, name, email, password, null));
                 } while (cr.moveToNext());
-            return companies1;
-        }catch(Exception e){
-            throw e;
+            }
+            return companies;
+        } catch (Exception e) {
+            // Handle the exception or log it with an appropriate message
+            e.printStackTrace(); // Example: Print the stack trace for debugging
+            // You may choose to return an empty list or handle the error differently
+            return new ArrayList<>();
         }
     }
 

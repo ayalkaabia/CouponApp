@@ -6,6 +6,9 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
 import android.content.Intent;
@@ -15,18 +18,28 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class AdminActivity extends AppCompatActivity {
 
-    Button btnBack,addCompany,updateCompany,deleteCompany,addCustomer,updateCustomer,deleteCustomer,getCompany;
+
+    Button btnBack,addCompany,updateCompany,deleteCompany,addCustomer,updateCustomer,deleteCustomer,getCompany,getCustomers,getCustomer;
+    DeleteCustomerFragment DelCustomerFragment = new DeleteCustomerFragment();
+    GetCustomersFrag getcustomersfrag= new GetCustomersFrag();
+    DeleteCompanyFragment DeleteCompanyfragment=new DeleteCompanyFragment();
+    Fragment currentFragment = null;
+    ConstraintLayout fragContainer;
+    // create adapter
 
 
     DB_Manager db=DB_Manager.getInstance(this);
+
     AdminFacade adminFacade;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin);
+
 
         addCompany=findViewById(R.id.admin_btnAddCompany);
         updateCompany=findViewById(R.id.admin_btnUpdateCompany);
@@ -36,6 +49,10 @@ public class AdminActivity extends AppCompatActivity {
         deleteCustomer=findViewById(R.id.admin_btnDeleteCustomer);
         btnBack=findViewById(R.id.admin_btnBack);
         getCompany=findViewById(R.id.admin_btnGetCompany);
+        fragContainer = findViewById(R.id.fragmentContainerAdmin);
+        getCustomers=findViewById(R.id.admin_btnGetCustomers);
+        getCustomer = findViewById(R.id.admin_btnGetCustomer);
+
 
 
         ButtonsListener buttonsListener = new ButtonsListener();
@@ -47,7 +64,8 @@ public class AdminActivity extends AppCompatActivity {
         updateCompany.setOnClickListener(buttonsListener);
         btnBack.setOnClickListener(buttonsListener);
         getCompany.setOnClickListener(buttonsListener);
-
+        getCustomers.setOnClickListener(buttonsListener);
+        getCustomer.setOnClickListener(buttonsListener);
         //we should get the admin facade instance from the intent or maybe we dont need the intent at all??
         try {
             adminFacade=AdminFacade.getInstance(this);
@@ -131,34 +149,55 @@ public class AdminActivity extends AppCompatActivity {
                 Intent intent = new Intent(AdminActivity.this, AddNewCompanyActivity.class);
                 startActivityForResult(intent,1);
             }
+
             else if(view.getId()==getCompany.getId()) {
                 Intent intent = new Intent(AdminActivity.this, GetCompanyActivity.class);
                 startActivity(intent);
             }
-//            else if(view.getId() == addCustomer.getId())
-//            {
-//                Intent intent = new Intent(AdminActivity.this, AddNewCustomerActivity.class);
-//                startActivityForResult(intent,2);
-//            }
-//            else if(view.getId() == updateCustomer.getId())
-//            {
-//                startActivityEditCustomer();
-//            }
-//            else if(view.getId() == updateCompany.getId())
-//            {
-//                startActivityEditCompany();
-//            }
-//            else if(view.getId() == deleteCompany.getId())
-//            {
-//                startActivityDeleteCompany();
-//            }
-//            else if(view.getId() == deleteCustomer.getId())
-//            {
-//                startActivityDeleteCustomer();
-//            }
+            else if(view.getId()==getCustomers.getId())
+            {
+                getcustomersfrag.setContext(AdminActivity.this);
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerAdmin, getcustomersfrag).commit();
+                currentFragment = getcustomersfrag;
+            }
+            else if(view.getId()==getCustomer.getId())
+            {
+                Intent intent = new Intent(AdminActivity.this, getCustomer.class);
+                startActivity(intent);
+            }
+            else if(view.getId() == addCustomer.getId())
+            {
+                  Intent intent = new Intent(AdminActivity.this, AddNewCustomer.class);
+                  startActivityForResult(intent,2);
+            }
+            else if(view.getId() == updateCustomer.getId())
+            {
+                Intent intent = new Intent(AdminActivity.this, UpdateCustomer.class);
+                startActivity(intent);
+            }
+            else if(view.getId() == updateCompany.getId())
+            {
+                Intent intent = new Intent(AdminActivity.this, UpdateCompany.class);
+                startActivity(intent);
+//                ArrayList<Coupon >abc = new ArrayList<>();
+
+            }
+            else if(view.getId() == deleteCompany.getId())
+            {
+                DeleteCompanyfragment.setContext(AdminActivity.this);
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerAdmin, DeleteCompanyfragment).commit();
+                currentFragment = DeleteCompanyfragment;
+            }
+            else if(view.getId() == deleteCustomer.getId())
+            {
+                DelCustomerFragment.setContext(AdminActivity.this);
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainerAdmin, DelCustomerFragment).commit();
+                currentFragment = DelCustomerFragment;
+            }
             if(view.getId() == btnBack.getId()){
                 finish();
             }
+
 
         }
     }

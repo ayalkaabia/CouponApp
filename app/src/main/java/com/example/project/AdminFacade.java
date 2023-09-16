@@ -7,10 +7,11 @@ import java.text.ParseException;
 import java.util.ArrayList;
 
 public class AdminFacade extends ClientFacade implements Serializable {
-    private static  final String adminEmail = "admin@admin.com";
+    private static  final String adminEmail = "admin";
     private static  final String adminPass = "admin";
     private static Context context;
-    //...Singleton.............................
+    //...Singleton....................
+    // .........
     private static AdminFacade instance = null;
 
     private AdminFacade(Context context) throws SQLException {
@@ -18,7 +19,10 @@ public class AdminFacade extends ClientFacade implements Serializable {
     }
 
     public static AdminFacade getInstance(Context context) throws SQLException {
-        if (instance == null) instance = new AdminFacade(context);
+        if (instance == null) {
+            instance = new AdminFacade(context);
+            return instance;
+        }
         return instance;
     }
     //...Singleton.............................

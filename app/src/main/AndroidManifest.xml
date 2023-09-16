@@ -13,6 +13,20 @@
         android:theme="@style/Theme.Project"
         tools:targetApi="31">
         <activity
+            android:name=".AddNewCustomer"
+            android:exported="false" />
+        <activity
+            android:name=".UpdateCompany"
+            android:exported="false" />
+        <activity
+            android:name=".getCustomer"
+            android:exported="false" />
+        <activity
+            android:name=".UpdateCustomer"
+            android:exported="false"
+            android:label="@string/title_activity_update_customer"
+            android:theme="@style/Theme.Project" />
+        <activity
             android:name=".GetCompanyActivity"
             android:exported="false" />
         <activity
