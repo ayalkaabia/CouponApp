@@ -1,7 +1,6 @@
 package com.example.project;
 
 import androidx.appcompat.app.AppCompatActivity;
-import com.example.project.Category;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,16 +9,11 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 
 public class viewCouponsActivity extends AppCompatActivity {
 
@@ -38,13 +32,13 @@ public class viewCouponsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_coupons);
 
-        maxPriceEt = findViewById(R.id.etMaxPrice);
+        maxPriceEt = findViewById(R.id.purchase_etMaxPrice);
 
 
-        maxPrice = findViewById(R.id.maxPrice_btn);
+        maxPrice = findViewById(R.id.purchase_maxPrice_btn);
         addCoupon = findViewById(R.id.purchaseNew_btn);
-        returnButton = findViewById(R.id.returnButton);
-        couponListView = findViewById(R.id.couponListView);
+        returnButton = findViewById(R.id.purchase_returnButton);
+        couponListView = findViewById(R.id.purchase_couponListView);
 
         chooseCategory = findViewById(R.id.chooseCate_radio);
         customersFacade = (CustomersFacade) getIntent().getSerializableExtra("customersFacade");
@@ -66,13 +60,13 @@ public class viewCouponsActivity extends AppCompatActivity {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 // Handle category selection here using if statements
-                if (checkedId == R.id.choose_food_btn) {
+                if (checkedId == R.id.purchase_choose_food_btn) {
                     filterCouponsByCategory(Category.FOOD);
-                } else if (checkedId == R.id.choose_elec_btn) {
+                } else if (checkedId == R.id.purchase_choose_elec_btn) {
                     filterCouponsByCategory(Category.ELECTRICITY);
-                } else if (checkedId == R.id.choose_rest_btn) {
+                } else if (checkedId == R.id.purchase_choose_rest_btn) {
                     filterCouponsByCategory(Category.RESTAURANT);
-                } else if (checkedId == R.id.choose_vac_btn) {
+                } else if (checkedId == R.id.purchase_choose_vac_btn) {
                     filterCouponsByCategory(Category.VACATION);
                 } else {
                 }

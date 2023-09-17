@@ -11,7 +11,7 @@
 
 
     <EditText
-        android:id="@+id/etMaxPrice"
+        android:id="@+id/purchase_etMaxPrice"
         android:layout_width="155dp"
         android:layout_height="47dp"
         android:layout_marginTop="28dp"
@@ -23,10 +23,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.199"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/maxPrice_btn" />
+        app:layout_constraintTop_toBottomOf="@+id/purchase_maxPrice_btn" />
 
     <Button
-        android:id="@+id/returnButton"
+        android:id="@+id/purchase_returnButton"
         android:layout_width="106dp"
         android:layout_height="42dp"
         android:backgroundTint="@color/cardview_shadow_start_color"
@@ -36,7 +36,7 @@
         tools:layout_editor_absoluteY="176dp" />
 
     <Button
-        android:id="@+id/maxPrice_btn"
+        android:id="@+id/purchase_maxPrice_btn"
         android:layout_width="87dp"
         android:layout_height="61dp"
         android:layout_marginTop="28dp"
@@ -47,7 +47,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ListView
-        android:id="@+id/couponListView"
+        android:id="@+id/purchase_couponListView"
         android:layout_width="407dp"
         android:layout_height="483dp"
         android:layout_marginTop="240dp"
@@ -64,33 +64,33 @@
         tools:layout_editor_absoluteX="269dp">
 
         <Button
-            android:id="@+id/choose_food_btn"
+            android:id="@+id/purchase_choose_food_btn"
             android:layout_width="match_parent"
             android:layout_height="36dp"
             android:text="FOOD" />
 
         <Button
-            android:id="@+id/choose_elec_btn"
+            android:id="@+id/purchase_choose_elec_btn"
             android:layout_width="wrap_content"
             android:layout_height="35dp"
             android:text="ELECTRICITY" />
 
         <Button
-            android:id="@+id/choose_rest_btn"
+            android:id="@+id/purchase_choose_rest_btn"
             android:layout_width="wrap_content"
             android:layout_height="36dp"
             android:text="RESTAURANT"
             android:textSize="12sp" />
 
         <Button
-            android:id="@+id/choose_vac_btn"
+            android:id="@+id/purchase_choose_vac_btn"
             android:layout_width="match_parent"
             android:layout_height="37dp"
             android:text="VACATION" />
     </RadioGroup>
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/purchase_filter"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Filter"
@@ -98,7 +98,7 @@
         tools:layout_editor_absoluteY="170dp" />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/purchase_unFilter"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="UnFilter"

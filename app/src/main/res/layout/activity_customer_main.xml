@@ -4,61 +4,61 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background"
-    android:backgroundTint="#2D2F31"
+    android:background="#A5CCEC"
     tools:context=".customerMainActivity">
 
-
-    <Button
-        android:id="@+id/coupons_btn2"
-        android:layout_width="288dp"
-        android:layout_height="91dp"
-        android:text="Purchase Coupon"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.504"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="457dp" />
-
     <TextView
-        android:id="@+id/customerMainActivity_tvWelcomeMessage"
-        android:layout_width="294dp"
-        android:layout_height="73dp"
-        android:layout_marginTop="60dp"
-        android:backgroundTint="@color/white"
+        android:id="@+id/customer_tvWelcomeMessage"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:background="#386181"
         android:gravity="center"
-        android:textAlignment="center"
-        android:textAppearance="@style/MaterialAlertDialog.Material3.Body.Text"
-        android:textColor="@color/black"
-        android:textColorHighlight="#000000"
-        android:textSize="34sp"
-        android:textStyle="bold|italic"
+        android:text="Welcome Message"
+        android:textColor="#FFFFFF"
+        android:textSize="24sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.47"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/details_btn"
-        android:layout_width="288dp"
-        android:layout_height="91dp"
-        android:layout_marginTop="60dp"
-        android:text="View your details"
+        android:id="@+id/customer_purchase_coupon"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:background="#279CC8"
+        android:text="Purchase Coupon"
         android:textSize="20sp"
+        android:textColor="#FFFFFF"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/customerMainActivity_tvWelcomeMessage" />
+        app:layout_constraintTop_toBottomOf="@+id/customer_tvWelcomeMessage" />
 
     <Button
-        android:id="@+id/coupons_btn"
-        android:layout_width="288dp"
-        android:layout_height="91dp"
-        android:layout_marginTop="52dp"
-        android:text="View your coupons"
+        android:id="@+id/customer_details_btn"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:background="#279CC8"
+        android:text="View Your Details"
         android:textSize="20sp"
+        android:textColor="#FFFFFF"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/details_btn" />
+        app:layout_constraintTop_toBottomOf="@+id/customer_purchase_coupon" />
+
+    <Button
+        android:id="@+id/customer_coupons_btn"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:background="#279CC8"
+        android:text="View Your Coupons"
+        android:textSize="20sp"
+        android:textColor="#FFFFFF"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/customer_details_btn" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -6,6 +6,7 @@ import java.util.Date;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RadioButton;
@@ -14,9 +15,9 @@ import android.widget.Toast;
 
 
 public class NewCouponActivity extends AppCompatActivity {
-    EditText couponId,amount ;
+    EditText companyName,maxPrice;
     RadioGroup chooseCategory ;
-    ImageButton newCouponSave ,newCouponCancel ;
+    Button buyBtn,returnBtn,filterBtn,unfilterBtn;
     CustomersFacade customersFacade;
 
     @Override
@@ -26,11 +27,13 @@ public class NewCouponActivity extends AppCompatActivity {
 
         customersFacade=(CustomersFacade) getIntent().getSerializableExtra("customersFacade");
 
-        couponId = findViewById(R.id.cardId_et);
-        amount = findViewById(R.id.amountcards_et);
-        chooseCategory = findViewById(R.id.chooseCate_radio);
-        newCouponSave =  findViewById(R.id.update_btnSave);
-        newCouponCancel =  findViewById(R.id.update_btnCancel);
+        buyBtn=findViewById(R.id.purchase_buy);
+        returnBtn=findViewById(R.id.purchase_return_button);
+        filterBtn=findViewById(R.id.purchase_filter);
+        unfilterBtn=findViewById(R.id.purchase_unFilter);
+        companyName= findViewById(R.id.purchase_company_name);
+        maxPrice=findViewById(R.id.purchase_maxPrice);
+
 
         ButtonsClick buttonsClick = new ButtonsClick();
         newCouponSave.setOnClickListener(buttonsClick);

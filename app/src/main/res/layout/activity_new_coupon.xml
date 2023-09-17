@@ -4,126 +4,183 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".NewCardActivity">
-
-    <EditText
-        android:id="@+id/cardId_et"
-        android:layout_width="184dp"
-        android:layout_height="52dp"
-        android:background="@android:drawable/editbox_background_normal"
-        android:backgroundTint="@color/material_dynamic_neutral_variant90"
-        android:digits="0123456789-"
-        android:ems="10"
-        android:hint="Coupon Id"
-        android:inputType="text"
-        android:maxLength="19"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.133"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="401dp" />
-
-    <EditText
-        android:id="@+id/amountcards_et"
-        android:layout_width="175dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="36dp"
-        android:layout_marginTop="20dp"
-        android:background="@android:drawable/editbox_background_normal"
-        android:backgroundTint="@color/material_dynamic_neutral_variant90"
-        android:digits="0123456789"
-        android:ems="10"
-        android:hint="Amount"
-        android:inputType="text"
-        android:maxLength="2"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cardId_et" />
+    android:background="@color/design_default_color_primary_dark"
+    android:backgroundTint="#84BAE4"
+    android:outlineAmbientShadowColor="#279CC8"
+    android:outlineSpotShadowColor="#279CC8"
+    tools:context=".TransActivity">
 
     <TextView
-        android:id="@+id/customerMainActivity_tvWelcomeMessage"
-        android:layout_width="385dp"
-        android:layout_height="95dp"
-        android:elegantTextHeight="true"
-        android:fontFamily="cursive"
-        android:shadowColor="@color/design_default_color_primary_dark"
-        android:shadowDx="12"
-        android:shadowDy="12"
-        android:shadowRadius="8"
-        android:text="Purchase New Coupon"
-        android:textAlignment="center"
-        android:textAllCaps="true"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-        android:textIsSelectable="true"
-        android:textSize="48sp"
+        android:id="@+id/purchase_tvTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Available Coupons"
+        android:textColor="@color/black"
+        android:textSize="24sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.513"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.034" />
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/purchase_company_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:hint="Company Name"
+        android:inputType="text"
+        android:textColor="@color/black"
+        android:textColorHint="@color/black"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/purchase_tvTitle" />
+
+    <EditText
+        android:id="@+id/purchase_maxPrice"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:hint="Max Price"
+        android:inputType="numberDecimal"
+        android:textColor="@color/black"
+        android:textColorHint="@color/black"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/purchase_company_name" />
 
     <RadioGroup
         android:id="@+id/chooseCate_radio"
-        android:layout_width="275dp"
-        android:layout_height="192dp"
-        app:layout_constraintBottom_toTopOf="@+id/cardId_et"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/customerMainActivity_tvWelcomeMessage">
+        app:layout_constraintTop_toBottomOf="@+id/purchase_maxPrice">
 
-        <Button
-            android:id="@+id/food_cate_btn"
-            android:layout_width="match_parent"
+        <RadioButton
+            android:id="@+id/purchase_choose_food_btn"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="FOOD" />
+            android:layout_weight="1"
+            android:text="FOOD"
+            android:textColor="@color/black"
+            android:textSize="14sp" />
 
-        <Button
-            android:id="@+id/electricity_cate_btn"
-            android:layout_width="match_parent"
+        <RadioButton
+            android:id="@+id/purchase_choose_elec_btn"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="ELECTRICITY" />
+            android:layout_weight="1"
+            android:text="ELECTRICITY"
+            android:textColor="@color/black"
+            android:textSize="14sp" />
 
-        <Button
-            android:id="@+id/resta_cate_btn"
-            android:layout_width="match_parent"
+        <RadioButton
+            android:id="@+id/purchase_choose_rest_btn"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="RESTAURANT" />
+            android:layout_weight="1"
+            android:text="RESTAURANT"
+            android:textColor="@color/black"
+            android:textSize="14sp" />
 
-        <Button
-            android:id="@+id/vacation_cate_btn"
-            android:layout_width="match_parent"
+        <RadioButton
+            android:id="@+id/purchase_choose_vac_btn"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="VACATION" />
-
+            android:layout_weight="1"
+            android:text="VACATION"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            tools:layout_editor_absoluteX="32dp"
+            tools:layout_editor_absoluteY="679dp" />
     </RadioGroup>
 
-    <ImageButton
-        android:id="@+id/update_btnSave"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_marginStart="68dp"
-        android:layout_marginBottom="36dp"
-        android:layout_weight="1"
-        android:background="#FFFFFF"
-        android:scaleType="fitCenter"
-        android:src="@drawable/save"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/amountcards_et"
-        app:layout_constraintVertical_bias="0.56" />
-
-    <ImageButton
-        android:id="@+id/update_btnCancel"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_marginStart="76dp"
-        android:background="#FFFFFF"
-        android:scaleType="fitCenter"
-        app:layout_constraintBottom_toBottomOf="@+id/update_btnSave"
+    <ListView
+        android:id="@+id/purchase_couponListView"
+        android:layout_width="507dp"
+        android:layout_height="401dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/purchase_buttonLayout"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/update_btnSave"
-        app:layout_constraintTop_toTopOf="@+id/update_btnSave"
-        app:layout_constraintVertical_bias="0.0"
-        app:srcCompat="@drawable/cancel" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/chooseCate_radio" />
+
+    <LinearLayout
+        android:id="@+id/purchase_buttonLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/purchase_couponListView">
+
+        <Button
+            android:id="@+id/purchase_filter"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_weight="1"
+            android:backgroundTint="#279CC8"
+            android:text="Filter"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
+
+        <Button
+            android:id="@+id/purchase_unFilter"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_weight="1"
+            android:backgroundTint="#279CC8"
+            android:text="UnFilter"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/purchase_buy"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:backgroundTint="#354DD5"
+        android:text="Buy"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/purchase_buttonLayout" />
+
+    <Button
+        android:id="@+id/purchase_return_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:backgroundTint="#279CC8"
+        android:text="Return"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toTopOf="@+id/purchase_buttonLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.111"
+        app:layout_constraintStart_toStartOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
