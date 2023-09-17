@@ -108,28 +108,20 @@
 
     <ListView
         android:id="@+id/purchase_couponListView"
-        android:layout_width="507dp"
-        android:layout_height="401dp"
-        android:layout_marginTop="16dp"
-        app:layout_constraintBottom_toTopOf="@+id/purchase_buttonLayout"
+        android:layout_width="423dp"
+        android:layout_height="363dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/chooseCate_radio" />
+        tools:layout_editor_absoluteY="490dp" />
 
     <LinearLayout
         android:id="@+id/purchase_buttonLayout"
-        android:layout_width="0dp"
+        android:layout_width="406dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
         android:gravity="center"
         android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/purchase_couponListView">
+        tools:layout_editor_absoluteY="337dp">
 
         <Button
             android:id="@+id/purchase_filter"
@@ -162,13 +154,17 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
+        android:layout_marginBottom="95dp"
         android:backgroundTint="#354DD5"
         android:text="Buy"
         android:textColor="@color/black"
         android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/purchase_couponListView"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/purchase_buttonLayout" />
+        app:layout_constraintTop_toBottomOf="@+id/purchase_buttonLayout"
+        app:layout_constraintVertical_bias="0.0" />
 
     <Button
         android:id="@+id/purchase_return_button"
@@ -181,6 +177,7 @@
         app:layout_constraintBottom_toTopOf="@+id/purchase_buttonLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.111"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/chooseCate_radio" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
