@@ -8,10 +8,16 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.sql.SQLException;
+
 public class AddNewCustomer extends AppCompatActivity {
 TextView Id,firstName,lastName,Email,Password;
 Button Cancel,Add;
-CustomersDBDAO customersDBDAO=CustomersDBDAO.getInstance(AddNewCustomer.this);
+AdminFacade ad_fe=AdminFacade.getInstance(AddNewCustomer.this);
+
+    public AddNewCustomer() throws SQLException {
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,7 +52,7 @@ CustomersDBDAO customersDBDAO=CustomersDBDAO.getInstance(AddNewCustomer.this);
                 Password.setText("");
                 Email.setText("");
                try {
-                   customersDBDAO.addCustomer(cs);
+                   ad_fe.customersDAO.addCustomer(cs);
                }
                catch (Exception e)
                {

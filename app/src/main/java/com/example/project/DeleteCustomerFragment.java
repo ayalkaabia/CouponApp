@@ -9,19 +9,23 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Adapter;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.sql.SQLException;
+
 public class DeleteCustomerFragment extends Fragment {
 
     DB_Manager db = DB_Manager.getInstance(getContext());
-    CustomersDBDAO custdb=CustomersDBDAO.getInstance(this.context);
+
     Button  delete;
     TextView id_tf;
     private Context context;
+    AdminFacade ad_fe=AdminFacade.getInstance(context);
 
-    public DeleteCustomerFragment() {
+    public DeleteCustomerFragment() throws SQLException {
         // Required empty public constructor
     }
 
@@ -48,7 +52,7 @@ public class DeleteCustomerFragment extends Fragment {
                 try {
                     int id = Integer.valueOf(id_tf.getText().toString());
                     try {
-                        custdb.deleteCustomer(id);
+                        ad_fe.customersDAO.deleteCustomer(id);
                         
                     }
                     catch (Exception e)

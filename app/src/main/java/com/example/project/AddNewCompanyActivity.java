@@ -8,10 +8,16 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import java.sql.SQLException;
+
 public class AddNewCompanyActivity extends AppCompatActivity {
 
     EditText etName,etNumber,etUserName,etPassword;
     Button btnSave,btnCancel;
+    AdminFacade ad_fe=AdminFacade.getInstance(AddNewCompanyActivity.this);
+
+    public AddNewCompanyActivity() throws SQLException {
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +47,13 @@ public class AddNewCompanyActivity extends AppCompatActivity {
                 userName=etUserName.toString();
                 password=etPassword.toString();
                 Company newCompany=new Company(number,name,userName,password,null);//when we make a new company it has no coupons yet which is why we give null
-
+                try {
+                    ad_fe.companiesDAO.addCompany(newCompany);
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                } catch (DataExists e) {
+                    throw new RuntimeException(e);
+                }
                 Intent intent=new Intent();
                 intent.putExtra("newCompany",newCompany);
                 setResult(RESULT_OK);

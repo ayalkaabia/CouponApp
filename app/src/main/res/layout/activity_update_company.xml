@@ -7,7 +7,7 @@
     tools:context=".UpdateCompany">
 
     <EditText
-        android:id="@+id/editTextText"
+        android:id="@+id/UpdateCompanyId"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -23,13 +23,14 @@
         android:id="@+id/UpdateCompanyName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="52dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="16dp"
         android:ems="10"
         android:hint="name"
         android:inputType="text"
         android:minHeight="48dp"
-        app:layout_constraintStart_toStartOf="@+id/editTextText"
-        app:layout_constraintTop_toBottomOf="@+id/editTextText" />
+        app:layout_constraintStart_toStartOf="@+id/UpdateCompanyId"
+        app:layout_constraintTop_toBottomOf="@+id/UpdateCompanyId" />
 
     <EditText
         android:id="@+id/UpdateCompanyEmail"
@@ -51,14 +52,14 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/UpdateCompanyEmail"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.465" />
 
     <Button
         android:id="@+id/updateCompanyCancel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="220dp"
-        android:layout_marginTop="48dp"
+        android:layout_marginStart="236dp"
+        android:layout_marginTop="12dp"
         android:text="cancel"
         app:layout_constraintStart_toStartOf="@+id/recyclerView"
         app:layout_constraintTop_toBottomOf="@+id/recyclerView" />
@@ -67,8 +68,8 @@
         android:id="@+id/updateCompanyButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="64dp"
-        android:layout_marginTop="48dp"
+        android:layout_marginStart="52dp"
+        android:layout_marginTop="12dp"
         android:text="update"
         app:layout_constraintStart_toStartOf="@+id/recyclerView"
         app:layout_constraintTop_toBottomOf="@+id/recyclerView" />
@@ -82,5 +83,16 @@
         android:text="find"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/UpdateCompanyPassword"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:ems="10"
+        android:hint="Password"
+        android:inputType="text"
+        app:layout_constraintStart_toStartOf="@+id/UpdateCompanyEmail"
+        app:layout_constraintTop_toBottomOf="@+id/UpdateCompanyEmail" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

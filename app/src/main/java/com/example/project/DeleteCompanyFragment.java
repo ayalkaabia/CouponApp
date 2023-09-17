@@ -13,15 +13,17 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.sql.SQLException;
+
 public class DeleteCompanyFragment extends Fragment {
 
 
     Button  delete;
     TextView idTf;
     private Context context;
-    CompaniesDBDAO company=CompaniesDBDAO.getInstance(context);
+    AdminFacade ad_fe=AdminFacade.getInstance(context);
 
-    public DeleteCompanyFragment() {
+    public DeleteCompanyFragment() throws SQLException {
         // Required empty public constructor
     }
 
@@ -51,7 +53,7 @@ public class DeleteCompanyFragment extends Fragment {
                 System.out.print(id);
                 idTf.setText("");
                 try {
-                    company.deleteCompany(id);
+                    ad_fe.companiesDAO.deleteCompany(id);
                 } catch (DataNotExists e) {
                     Toast.makeText(context, "Something went wrong ", Toast.LENGTH_SHORT).show();
                     throw new RuntimeException(e);

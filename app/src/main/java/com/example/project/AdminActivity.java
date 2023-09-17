@@ -35,6 +35,10 @@ public class AdminActivity extends AppCompatActivity {
     DB_Manager db=DB_Manager.getInstance(this);
 
     AdminFacade adminFacade;
+
+    public AdminActivity() throws SQLException {
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -14,6 +14,10 @@ public class GetCompanyActivity extends AppCompatActivity {
 
     private EditText companyIdEditText;
     private Button displayDetailsButton,Cancel;
+    private AdminFacade ad_fe=AdminFacade.getInstance(GetCompanyActivity.this);
+
+    public GetCompanyActivity() throws SQLException {
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -36,13 +40,7 @@ public class GetCompanyActivity extends AppCompatActivity {
                 String companyId = companyIdEditText.getText().toString();
                 // Use AdminFacade to fetch company details by ID
                 Company company = null;
-                try {
-                    company = AdminFacade.getInstance(GetCompanyActivity.this).getOneCompany(Integer.parseInt(companyId));
-                } catch (DataNotExists e) {
-                    throw new RuntimeException(e);
-                } catch (SQLException e) {
-                    throw new RuntimeException(e);
-                }
+                company = ad_fe.companiesDAO.getOneCompany(Integer.parseInt(companyId));
                 if (company != null) {
                     displayCompanyDetailsFragment(company);
                 } else {

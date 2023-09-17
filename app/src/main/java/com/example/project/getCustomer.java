@@ -7,13 +7,17 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class getCustomer extends AppCompatActivity {
     Button ShowFields;
     TextView lName,fName,Email,cancel,id;
     ArrayList<Customer> customers=new ArrayList<>();
-    CustomersDBDAO CustomerDataBase=CustomersDBDAO.getInstance(getCustomer.this);
+    AdminFacade ad_fe=AdminFacade.getInstance(getCustomer.this);
+
+    public getCustomer() throws SQLException {
+    }
 
 
     @Override
@@ -38,7 +42,7 @@ public class getCustomer extends AppCompatActivity {
         ShowFields.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-              Customer myCustomer=  CustomerDataBase.getOneCustomer(Integer.parseInt(id.getText().toString()));
+              Customer myCustomer=  ad_fe.customersDAO.getOneCustomer(Integer.parseInt(id.getText().toString()));
                 lName.setVisibility(View.VISIBLE);
                 lName.setText(myCustomer.getlName());
                 fName.setVisibility(View.VISIBLE);

@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class GetCustomersFrag extends Fragment {
@@ -22,10 +23,10 @@ public class GetCustomersFrag extends Fragment {
     private Context context;
     private ArrayList<Customer> customerlist;
     private RecyclerView recyclerView;
-    private CustomersDBDAO customersdb=CustomersDBDAO.getInstance(context);
+    private AdminFacade ad_fe=AdminFacade.getInstance(context);
 
 
-    public GetCustomersFrag() {
+    public GetCustomersFrag() throws SQLException {
         // Required empty public constructor
     }
 
@@ -35,7 +36,7 @@ public class GetCustomersFrag extends Fragment {
         // Inflate the layout for this fragment
         View myview=inflater.inflate(R.layout.fragment_get_customers, container, false);
         customerlist=new ArrayList<>();
-         customerlist=customersdb.getAllCustomers();
+         customerlist=ad_fe.customersDAO.getAllCustomers();
 
 
         return myview;

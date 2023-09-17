@@ -8,10 +8,15 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.sql.SQLException;
+
 public class UpdateCustomer extends AppCompatActivity {
-    TextView id,firstname,lastname,email;
+    TextView id,firstname,lastname,email,Pass;
     Button UpdateBtn,CancelBtn;
-    CustomersDBDAO CustomerDataBase=CustomersDBDAO.getInstance(UpdateCustomer.this);
+    AdminFacade ad_fe=AdminFacade.getInstance(UpdateCustomer.this);
+
+    public UpdateCustomer() throws SQLException {
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,6 +28,7 @@ public class UpdateCustomer extends AppCompatActivity {
         email=findViewById(R.id.UpdateCustomerEmail);
         UpdateBtn=findViewById(R.id.AdminCustomerUpdateBtn);
         CancelBtn=findViewById(R.id.updateCustomerCancel);
+        Pass=findViewById(R.id.UpdateCustomerPass);
 
         UpdateBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -37,7 +43,7 @@ public class UpdateCustomer extends AppCompatActivity {
                     throw e;
                 }
                 try{
-                    updateValue=CustomerDataBase.getOneCustomer(Id);
+                    updateValue=ad_fe.customersDAO.getOneCustomer(Id);
                 }
                 catch (Exception e)
                 {
@@ -47,6 +53,7 @@ public class UpdateCustomer extends AppCompatActivity {
                 String fname=updateValue.getfName();
                 String lname=updateValue.getlName();
                 String Email=updateValue.getEmail();
+                String Password=updateValue.getPassword();
                 if(!firstname.getText().toString().equals(null))
                 {
                      fname=firstname.getText().toString();
@@ -59,6 +66,10 @@ public class UpdateCustomer extends AppCompatActivity {
                 {
                     Email=email.getText().toString();
                 }
+                if(!Pass.getText().toString().equals(null))
+                {
+                    Password=Pass.getText().toString();
+                }
                 id.setText("");
                 firstname.setText("");
                 lastname.setText("");
@@ -68,9 +79,10 @@ public class UpdateCustomer extends AppCompatActivity {
                 updateValue.setEmail(Email);
                 updateValue.setfName(fname);
                 updateValue.setlName(lname);
+                updateValue.setPassword(Password);
 
 
-                CustomerDataBase.updateCustomer(updateValue);
+                ad_fe.customersDAO.updateCustomer(updateValue);
             }
         });
 
