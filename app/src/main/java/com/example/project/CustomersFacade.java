@@ -91,4 +91,8 @@ public class CustomersFacade extends ClientFacade implements Serializable {
 
         customersDAO.updateCustomer(customer);
     }
+    ArrayList<Coupon> getCouponsToBuy() throws ParseException {
+        return couponsDAO.getAllCoupons();
+
+    }
 }

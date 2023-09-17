@@ -412,7 +412,7 @@ public class CouponsDBDAO implements CouponsDAO {
         Cursor cr=null;
         try {
             cr = dbManager.getCursor(dbManager.TBL_CATEGORIES, fields,  " WHERE " + dbManager.CATEGORY_NAME + "='" + categoryType + "'");
-           logSystemOutMessage(String.valueOf(cr.getCount())+ "hhhhhhhhhhhhhhhhhhhhhhhhhhhh");
+
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
