@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".NewCardActivity">
+
+    <EditText
+        android:id="@+id/cardId_et"
+        android:layout_width="184dp"
+        android:layout_height="52dp"
+        android:background="@android:drawable/editbox_background_normal"
+        android:backgroundTint="@color/material_dynamic_neutral_variant90"
+        android:digits="0123456789-"
+        android:ems="10"
+        android:hint="Coupon Id"
+        android:inputType="text"
+        android:maxLength="19"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.133"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteY="401dp" />
+
+    <EditText
+        android:id="@+id/amountcards_et"
+        android:layout_width="175dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="36dp"
+        android:layout_marginTop="20dp"
+        android:background="@android:drawable/editbox_background_normal"
+        android:backgroundTint="@color/material_dynamic_neutral_variant90"
+        android:digits="0123456789"
+        android:ems="10"
+        android:hint="Amount"
+        android:inputType="text"
+        android:maxLength="2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cardId_et" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="385dp"
+        android:layout_height="95dp"
+        android:elegantTextHeight="true"
+        android:fontFamily="cursive"
+        android:shadowColor="@color/design_default_color_primary_dark"
+        android:shadowDx="12"
+        android:shadowDy="12"
+        android:shadowRadius="8"
+        android:text="Add New Coupon"
+        android:textAlignment="center"
+        android:textAllCaps="true"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textIsSelectable="true"
+        android:textSize="48sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.513"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.034" />
+
+    <RadioGroup
+        android:id="@+id/chooseCate_radio"
+        android:layout_width="275dp"
+        android:layout_height="192dp"
+        app:layout_constraintBottom_toTopOf="@+id/cardId_et"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView">
+
+        <Button
+            android:id="@+id/food_cate_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="FOOD" />
+
+        <Button
+            android:id="@+id/electricity_cate_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="ELECTRICITY" />
+
+        <Button
+            android:id="@+id/resta_cate_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="RESTAURANT" />
+
+        <Button
+            android:id="@+id/vacation_cate_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="VACATION" />
+
+    </RadioGroup>
+
+    <ImageButton
+        android:id="@+id/update_btnSave"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginStart="68dp"
+        android:layout_marginBottom="36dp"
+        android:layout_weight="1"
+        android:background="#FFFFFF"
+        android:scaleType="fitCenter"
+        android:src="@drawable/save"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/amountcards_et"
+        app:layout_constraintVertical_bias="0.56" />
+
+    <ImageButton
+        android:id="@+id/update_btnCancel"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginStart="76dp"
+        android:background="#FFFFFF"
+        android:scaleType="fitCenter"
+        app:layout_constraintBottom_toBottomOf="@+id/update_btnSave"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/update_btnSave"
+        app:layout_constraintTop_toTopOf="@+id/update_btnSave"
+        app:layout_constraintVertical_bias="0.0"
+        app:srcCompat="@drawable/cancel" />
+</androidx.constraintlayout.widget.ConstraintLayout>

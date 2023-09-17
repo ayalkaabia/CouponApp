@@ -16,6 +16,9 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import com.example.project.ClientType;
+import com.example.project.DB_Manager;
+
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
@@ -70,55 +73,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         db = DB_Manager.getInstance(this);
-        db.intilizationCategoryTable(); // how should we initialize the category table
-
-        //CREATE INSTANCES OF CUSTOMERDBDAO AND COUPONDBDAO AND COMPANYDBDAO AND TRY FUNCTIONS
-        //AND TRY ADMIN FACADE FUNCTIONS WWITH PRINTS IN THE END
-       //  Coupon coupon = new Coupon(100,50,Category.FOOD,"hhh","hhh",date,date2,5,50.0,"hhh");
-//        try {
-//           // Company company = new Company(13,"mohamad","hhh","hhh",null);
-//            ArrayList<Coupon> coupons = new ArrayList<>();
-//            Customer customer= new Customer(100,"merry","shalabi","hh","hh",coupons);
-//            CustomersDBDAO customersDBDAO= CustomersDBDAO.getInstance(this);
-//            customersDBDAO.addCustomer(customer);
-//            AdminFacade adminFacade=AdminFacade.getInstance(this);
-//          //  adminFacade.addCompany(company);
-//            CouponsDBDAO couponsDBDAO=CouponsDBDAO.getInstance(this);
-//            CompanyFacade companyFacade = new CompanyFacade(this);
-//            companyFacade.addCoupon(coupon);
-//        } catch (ParseException e) {
-//            throw new RuntimeException(e);
-//        } catch (SQLException e) {
-//            throw new RuntimeException(e);
-//        }
-//        catch (DataExists e) {
-//            throw new RuntimeException(e);
-//        }
-
-//            CompaniesDBDAO companiesDBDAO=CompaniesDBDAO.getInstance(this);
-//            Company company = new Company(1,"lllll","llllllll","llllllll",null);
-////            companiesDBDAO.updateCompany(company);
-//            CustomersDBDAO customersDBDAO = CustomersDBDAO.getInstance(this);
-//            Customer customer=new Customer(3,"kkkkkkk","kkkkkk","kkkkkkkkkk","kkkkkkkkkkk",null);
-//            customersDBDAO.addCustomer(customer);
-//            customersDBDAO.deleteCustomer(customer.getId());
-//        } catch (Exception e) {
-//            throw new RuntimeException(e);
-//        }
-         //   Date date = new Date(2001,8,21);
-           // Date date2 = new Date(2050,8,21);
-//        try {
-////            Coupon coupon= new Coupon(1,12,Category.FOOD,"hhhhhhh","hhhhh",date,date2,5,50.5,"hhhh");
-////            CouponsDBDAO couponsDBDAO = CouponsDBDAO.getInstance(this);
-////          //  couponsDBDAO.addCoupon(coupon);
-////           // couponsDBDAO.deleteCoupon(coupon.getId());
-////           // couponsDBDAO.addCouponPurchase(10,10);
-////            couponsDBDAO.deleteCouponPurchase(10,10);
-////            AdminFacade adminFacade=AdminFacade.getInstance(this);
-//        } catch (ParseException e) {
-//            throw new RuntimeException(e);
-//        }
-
+        db.intilizationCategoryTable();
 
 
         rgUserType = findViewById(R.id.main_rgUserType);
@@ -147,10 +102,10 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(MainActivity.this, "Error User Name or Password", Toast.LENGTH_SHORT).show();
                     return;
                 }
-         //       if (o instanceof AdminFacade)
-                //           OpenAdminActivity((AdminFacade)o);
-//                if(o instanceof CustomersFacade)
-//                    OpenCustomerActivity((CustomersFacade)o);
+             //     if (o instanceof AdminFacade)
+               //       OpenAdminActivity((AdminFacade)o);
+               if(o instanceof CustomersFacade)
+                   OpenCustomerActivity((CustomersFacade)o);
 //                if(o instanceof CompanyFacade)
 //                    OpenCompanyActivity((CompanyFacade)o);
             }
@@ -191,11 +146,11 @@ public class MainActivity extends AppCompatActivity {
 //        intent.putExtra("adminFacade",adminFacade );
 //        startActivity(intent);
 //    }
-//    private void OpenCustomerActivity(CustomersFacade customersFacade) {
-//        Intent intent = new Intent(MainActivity.this, CustomerActivity.class);
-//        intent.putExtra("customersFacade", customersFacade);
-//        startActivity(intent);
-//    }
+   private void OpenCustomerActivity(CustomersFacade customersFacade) {
+       Intent intent = new Intent(MainActivity.this, customerMainActivity.class);
+       intent.putExtra("customersFacade", customersFacade);
+       startActivity(intent);
+  }
 //    private void OpenCompanyActivity(CompanyFacade companyFacade) {
 //        Intent intent = new Intent(MainActivity.this, CompanyActivity.class);
 //        intent.putExtra("companyFacade", companyFacade);

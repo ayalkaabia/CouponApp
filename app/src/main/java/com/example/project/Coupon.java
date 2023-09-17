@@ -1,8 +1,9 @@
 package com.example.project;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Coupon {
+public class Coupon implements Serializable {
     private int id;
     private int companyID;
     private Category category;
