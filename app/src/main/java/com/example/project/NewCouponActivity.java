@@ -17,11 +17,14 @@ public class NewCouponActivity extends AppCompatActivity {
     EditText couponId,amount ;
     RadioGroup chooseCategory ;
     ImageButton newCouponSave ,newCouponCancel ;
+    CustomersFacade customersFacade;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_coupon);
+
+        customersFacade=(CustomersFacade) getIntent().getSerializableExtra("customersFacade");
 
         couponId = findViewById(R.id.cardId_et);
         amount = findViewById(R.id.amountcards_et);

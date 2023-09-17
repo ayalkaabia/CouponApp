@@ -39,7 +39,7 @@
         app:layout_constraintTop_toBottomOf="@+id/cardId_et" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/customerMainActivity_tvWelcomeMessage"
         android:layout_width="385dp"
         android:layout_height="95dp"
         android:elegantTextHeight="true"
@@ -48,7 +48,7 @@
         android:shadowDx="12"
         android:shadowDy="12"
         android:shadowRadius="8"
-        android:text="Add New Coupon"
+        android:text="Purchase New Coupon"
         android:textAlignment="center"
         android:textAllCaps="true"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
@@ -69,7 +69,7 @@
         app:layout_constraintBottom_toTopOf="@+id/cardId_et"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView">
+        app:layout_constraintTop_toBottomOf="@+id/customerMainActivity_tvWelcomeMessage">
 
         <Button
             android:id="@+id/food_cate_btn"

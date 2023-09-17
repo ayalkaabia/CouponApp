@@ -15,6 +15,7 @@ import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -22,13 +23,13 @@ import java.util.Date;
 
 public class viewCouponsActivity extends AppCompatActivity {
 
-    Button  maxPrice,minPrice,addCoupon,returnButton;
-    EditText couponIdEt ;
-    EditText companyIdEt;
+    Button maxPrice, addCoupon, returnButton; // i think we should REMOVE the minPrice button and edit text from xml as well as here
+    EditText maxPriceEt;
+
     ListView couponListView;
     RadioGroup chooseCategory;
     ArrayAdapter<Coupon> adapter;
-    ArrayList<Coupon> coupons = new ArrayList<>();
+    ArrayList<Coupon> coupons;
     CustomersFacade customersFacade;
 
     @Override
@@ -37,18 +38,25 @@ public class viewCouponsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_coupons);
 
-        couponIdEt = findViewById(R.id.etCouponId);
-        companyIdEt=findViewById(R.id.etcompanyID);
-        minPrice =findViewById(R.id.minPrice_btn);
-        maxPrice=findViewById(R.id.maxPrice_btn);
-        addCoupon =findViewById(R.id.purchaseNew_btn);
-        returnButton=findViewById(R.id.returnButton);
+        maxPriceEt = findViewById(R.id.etMaxPrice);
+
+
+        maxPrice = findViewById(R.id.maxPrice_btn);
+        addCoupon = findViewById(R.id.purchaseNew_btn);
+        returnButton = findViewById(R.id.returnButton);
         couponListView = findViewById(R.id.couponListView);
 
         chooseCategory = findViewById(R.id.chooseCate_radio);
-        customersFacade=(CustomersFacade) getIntent().getSerializableExtra("customersFacade");
+        customersFacade = (CustomersFacade) getIntent().getSerializableExtra("customersFacade");
 
-        ArrayList<Coupon> coupons = new ArrayList<>();
+        coupons = new ArrayList<>();
+        try {
+            coupons = customersFacade.getCustomerCoupons(); //coupons arraylist has all customer coupons
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+        //!!!!!!!!!!!!!!!!!!!!!!! SHOULD I SHOW ALL COUPONS THE MOMENT WE PRESS VIEW COUPONS?  I THINK YES AND I THINK SHAHD DID IT !!!!!!!!!
+
         // Create an adapter for your coupon list
         adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, coupons);
         // Set the initial adapter for the ListView
@@ -71,32 +79,20 @@ public class viewCouponsActivity extends AppCompatActivity {
             }
         });
 
-        minPrice.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                double minimumPrice = findMinPrice(coupons); // Get the minimum price
 
-                if (minimumPrice != Double.MAX_VALUE) {
-                    ArrayList<Coupon> minPriceCoupons = filterdCouponsByMinPrice(coupons, minimumPrice);
-
-                    // Create an adapter to display the filtered coupons in the ListView
-                    ArrayAdapter<Coupon> adapter = new ArrayAdapter<>(viewCouponsActivity.this, android.R.layout.simple_list_item_1, minPriceCoupons);
-
-                    // Set the adapter on the ListView
-                    couponListView.setAdapter(adapter);
-                } else {
-                    Toast.makeText(viewCouponsActivity.this, "No coupons found with minimum price.", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
         maxPrice.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                double maximumPrice = findMaxPrice(coupons); // Get the maximum price
+
+                double maximumPrice = Double.parseDouble(maxPriceEt.getText().toString());
 
                 if (maximumPrice != Double.MIN_VALUE) {
-                    ArrayList<Coupon> maxPriceCoupons = filterdCouponsByMaxPrice(coupons, maximumPrice);
-
+                    ArrayList<Coupon> maxPriceCoupons;
+                    try {
+                        maxPriceCoupons = customersFacade.getCustomerCoupons(maximumPrice);
+                    } catch (ParseException e) {
+                        throw new RuntimeException(e);
+                    }
                     // Create an adapter to display the filtered coupons in the ListView
                     ArrayAdapter<Coupon> adapter = new ArrayAdapter<>(viewCouponsActivity.this, android.R.layout.simple_list_item_1, maxPriceCoupons);
 
@@ -110,8 +106,10 @@ public class viewCouponsActivity extends AppCompatActivity {
         addCoupon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent= new Intent(viewCouponsActivity.this, NewCouponActivity.class);
-                startActivity(intent);            }
+                Intent intent = new Intent(viewCouponsActivity.this, NewCouponActivity.class);
+                intent.putExtra("customerFacade", customersFacade);
+                startActivity(intent);
+            }
         });
 
         returnButton.setOnClickListener(new View.OnClickListener() {
@@ -126,101 +124,25 @@ public class viewCouponsActivity extends AppCompatActivity {
 
 
     private void filterCouponsByCategory(Category selectedCategory) {
-        ArrayList<Coupon> filteredCoupons = new ArrayList<>();
-
-        for (Coupon c : coupons) {
-            if (c.getCategory() == selectedCategory) {
-                filteredCoupons.add(c);
-            }
+        ArrayList<Coupon> filteredCoupons;
+        try {
+            filteredCoupons = customersFacade.getCustomerCoupons(selectedCategory);
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
         }
-
-        // Update the adapter with the filtered coupons and refresh the ListView
-        adapter.clear();
-        adapter.addAll(filteredCoupons);
-        adapter.notifyDataSetChanged();
 
         if (filteredCoupons.isEmpty()) {
             Toast.makeText(viewCouponsActivity.this, "No coupons found for the selected category.", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-
-    public ArrayList<Coupon> filterdCouponsBycouponId(ArrayList<Coupon> coupons) {
-        ArrayList<Coupon> filteredList = new ArrayList<>();
-
-        for (Coupon c : coupons) {
-            // Check if couponIdEt is not empty and matches the coupon's ID
-            if (!couponIdEt.getText().toString().isEmpty() &&
-                    c.getId() == Integer.parseInt(couponIdEt.getText().toString()))
-            {
-                filteredList.add(c);
-            }
-
-        }
-        return filteredList;
-    }
-    public ArrayList<Coupon> filterdCouponsBycompanyId(ArrayList<Coupon> coupons) {
-        ArrayList<Coupon> filteredList = new ArrayList<>();
-
-        for (Coupon c : coupons) {
-            // Check if couponIdEt is not empty and matches the coupon's ID
-            if (!companyIdEt.getText().toString().isEmpty() &&
-                    c.getId() == Integer.parseInt(companyIdEt.getText().toString()))
-            {
-                filteredList.add(c);
-            }
-
-        }
-        return filteredList;
-    }
-
-    public double findMaxPrice(ArrayList<Coupon> coupons) {
-        double maxPrice = Double.MIN_VALUE; // Initialize with the smallest possible value
-
-        for (Coupon c : coupons) {
-            if (c.getPrice() > maxPrice) {
-                maxPrice = c.getPrice();
-            }
+        } else {
+            // Update the adapter with the filtered coupons and refresh the ListView
+            adapter.clear();
+            adapter.addAll(filteredCoupons);
+            adapter.notifyDataSetChanged();
         }
 
-        return maxPrice;
+
     }
 
-    public double findMinPrice(ArrayList<Coupon> coupons) {
-        double minPrice = Double.MAX_VALUE; // Initialize with the largest possible value
-
-        for (Coupon c : coupons) {
-            if (c.getPrice() < minPrice) {
-                minPrice = c.getPrice();
-            }
-        }
-
-        return minPrice;
-    }
-
-
-    public ArrayList<Coupon> filterdCouponsByMinPrice(ArrayList<Coupon> coupons, double minPrice) {
-        ArrayList<Coupon> filteredList = new ArrayList<>();
-
-        for (Coupon c : coupons) {
-            if (c.getPrice() == minPrice) {
-                filteredList.add(c);
-            }
-        }
-
-        return filteredList;
-    }
-    public ArrayList<Coupon> filterdCouponsByMaxPrice(ArrayList<Coupon> coupons, double maxPrice) {
-        ArrayList<Coupon> filteredList = new ArrayList<>();
-
-        for (Coupon c : coupons) {
-            if (c.getPrice() == maxPrice) {
-                filteredList.add(c);
-            }
-        }
-
-        return filteredList;
-    }
 
 
 }

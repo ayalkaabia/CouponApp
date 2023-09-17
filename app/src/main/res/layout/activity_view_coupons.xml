@@ -11,35 +11,19 @@
 
 
     <EditText
-        android:id="@+id/etcompanyID"
+        android:id="@+id/etMaxPrice"
         android:layout_width="155dp"
         android:layout_height="47dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="28dp"
         android:hint="Filter By Company Id"
         android:inputType="numberDecimal"
         android:textColor="#FAF7F7"
         android:textColorHint="#FFFFFF"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.038"
+        app:layout_constraintHorizontal_bias="0.199"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <EditText
-        android:id="@+id/etCouponId"
-        android:layout_width="157dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="24dp"
-        android:hint="Filter By Coupon Id"
-        android:inputType="numberDecimal"
-        android:shadowColor="#000000"
-        android:textColor="#FFFFFF"
-        android:textColorHint="#FFFFFF"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="@+id/etcompanyID"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etcompanyID" />
+        app:layout_constraintTop_toBottomOf="@+id/maxPrice_btn" />
 
     <Button
         android:id="@+id/returnButton"
@@ -48,32 +32,19 @@
         android:backgroundTint="@color/cardview_shadow_start_color"
         android:text="return "
         android:textSize="20sp"
-        tools:layout_editor_absoluteX="163dp"
-        tools:layout_editor_absoluteY="155dp" />
-
-    <Button
-        android:id="@+id/purchaseNew_btn"
-        android:layout_width="134dp"
-        android:layout_height="43dp"
-        android:text="Add Coupon"
-        tools:layout_editor_absoluteX="10dp"
-        tools:layout_editor_absoluteY="155dp" />
-
-    <Button
-        android:id="@+id/minPrice_btn"
-        android:layout_width="89dp"
-        android:layout_height="60dp"
-        android:text="min Price"
-        tools:layout_editor_absoluteX="172dp"
-        tools:layout_editor_absoluteY="69dp" />
+        tools:layout_editor_absoluteX="152dp"
+        tools:layout_editor_absoluteY="176dp" />
 
     <Button
         android:id="@+id/maxPrice_btn"
         android:layout_width="87dp"
         android:layout_height="61dp"
+        android:layout_marginTop="28dp"
         android:text="max Price"
-        tools:layout_editor_absoluteX="174dp"
-        tools:layout_editor_absoluteY="8dp" />
+        app:layout_constraintEnd_toStartOf="@+id/chooseCate_radio"
+        app:layout_constraintHorizontal_bias="0.472"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ListView
         android:id="@+id/couponListView"
@@ -108,7 +79,8 @@
             android:id="@+id/choose_rest_btn"
             android:layout_width="wrap_content"
             android:layout_height="36dp"
-            android:text="RESTAURANT" />
+            android:text="RESTAURANT"
+            android:textSize="12sp" />
 
         <Button
             android:id="@+id/choose_vac_btn"
@@ -116,5 +88,21 @@
             android:layout_height="37dp"
             android:text="VACATION" />
     </RadioGroup>
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Filter"
+        tools:layout_editor_absoluteX="46dp"
+        tools:layout_editor_absoluteY="170dp" />
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="UnFilter"
+        tools:layout_editor_absoluteX="286dp"
+        tools:layout_editor_absoluteY="170dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

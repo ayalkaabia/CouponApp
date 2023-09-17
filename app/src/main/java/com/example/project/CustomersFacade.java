@@ -87,4 +87,8 @@ public class CustomersFacade extends ClientFacade implements Serializable {
     }
 
 
+    public void updateCustomer(Customer customer) {
+
+        customersDAO.updateCustomer(customer);
+    }
 }

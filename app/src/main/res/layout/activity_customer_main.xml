@@ -9,22 +9,32 @@
     tools:context=".customerMainActivity">
 
 
+    <Button
+        android:id="@+id/coupons_btn2"
+        android:layout_width="288dp"
+        android:layout_height="91dp"
+        android:text="Purchase Coupon"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.504"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteY="457dp" />
+
     <TextView
-        android:id="@+id/textView"
-        android:layout_width="299dp"
-        android:layout_height="68dp"
-        android:layout_marginTop="56dp"
-        android:backgroundTint="#985151"
+        android:id="@+id/customerMainActivity_tvWelcomeMessage"
+        android:layout_width="294dp"
+        android:layout_height="73dp"
+        android:layout_marginTop="60dp"
+        android:backgroundTint="@color/white"
         android:gravity="center"
-        android:text="Welcome"
         android:textAlignment="center"
         android:textAppearance="@style/MaterialAlertDialog.Material3.Body.Text"
-        android:textColor="#FFFFFF"
+        android:textColor="@color/black"
         android:textColorHighlight="#000000"
         android:textSize="34sp"
         android:textStyle="bold|italic"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintHorizontal_bias="0.47"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -33,19 +43,19 @@
         android:layout_width="288dp"
         android:layout_height="91dp"
         android:layout_marginTop="60dp"
-        android:text="View Coustomer's details"
+        android:text="View your details"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        app:layout_constraintTop_toBottomOf="@+id/customerMainActivity_tvWelcomeMessage" />
 
     <Button
         android:id="@+id/coupons_btn"
         android:layout_width="288dp"
         android:layout_height="91dp"
         android:layout_marginTop="52dp"
-        android:text="View Coustomer's coupons"
+        android:text="View your coupons"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

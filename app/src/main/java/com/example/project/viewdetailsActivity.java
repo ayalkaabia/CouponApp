@@ -69,13 +69,11 @@ public class viewdetailsActivity extends AppCompatActivity {
         EditDetails.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (selectedCustomerId != -1) {
+
                     Intent intent = new Intent(viewdetailsActivity.this, updateDetailsActivity.class);
-                    intent.putExtra("customerId", selectedCustomerId);
+                    intent.putExtra("customerFacade", customersFacade);
                     startActivity(intent);
-                } else {
-                    // Handle the case where no customer is selected
-                }
+
             }
         });
     }
