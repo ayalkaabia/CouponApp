@@ -1,30 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".viewdetailsActivity">
 
-    <Button
-        android:id="@+id/detail_btnEdit"
-        android:layout_width="154dp"
-        android:layout_height="47dp"
-        android:layout_marginTop="28dp"
-        android:text="Edit"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.062"
+    <TextView
+        android:id="@+id/fName_txt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="36dp"
+        android:layout_marginTop="84dp"
+        android:text="First Name: "
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ListView
-        android:id="@+id/lv_customerDetails"
-        android:layout_width="374dp"
-        android:layout_height="293dp"
-        android:layout_marginTop="104dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.19"
+    <TextView
+        android:id="@+id/customerEmail_txt"
+        android:layout_width="177dp"
+        android:layout_height="21dp"
+        android:layout_marginStart="36dp"
+        android:layout_marginTop="16dp"
+        android:text="Email: "
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/customerId_txt" />
+
+    <TextView
+        android:id="@+id/lName_txt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="36dp"
+        android:layout_marginTop="116dp"
+        android:text="Last Name: "
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/customerId_txt"
+        android:layout_width="78dp"
+        android:layout_height="21dp"
+        android:layout_marginTop="16dp"
+        android:text="ID"
+        app:layout_constraintTop_toBottomOf="@+id/lName_txt"
+        tools:layout_editor_absoluteX="36dp" />
+
+    <TextView
+        android:id="@+id/yourDetails"
+        android:layout_width="93dp"
+        android:layout_height="32dp"
+        android:layout_marginTop="16dp"
+        android:text="Your Details "
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.336"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- You can add more TextViews for other customer details as needed -->
 
 </androidx.constraintlayout.widget.ConstraintLayout>
