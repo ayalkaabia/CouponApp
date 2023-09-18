@@ -33,7 +33,7 @@
         android:layout_gravity="start"
         android:layout_marginTop="8dp"
         android:background="@android:drawable/alert_light_frame"
-        android:textColor="@color/colorAccent"
+        android:textColor="#666666"
         android:textSize="16sp" />
 
     <TextView

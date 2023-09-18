@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".DeleteCompanyFragment">
+
+    <EditText
+        android:id="@+id/company_id_delete_tf"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="100dp"
+        android:layout_marginTop="10dp"
+        android:ems="10"
+        android:hint="company's id"
+        android:inputType="number"
+        android:minHeight="48dp"
+        android:text="" />
+
+    <Button
+        android:id="@+id/Company_delete_button"
+        android:layout_width="180dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="100dp"
+        android:layout_marginLeft="100dp"
+        android:text="Delete"/>
+</FrameLayout>
